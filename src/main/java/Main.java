@@ -19,7 +19,7 @@ public class Main {
           clientSocket = serverSocket.accept();
 
             OutputStream outputStream=clientSocket.getOutputStream();
-          byte[] byteArr="+PONG\\r\\n".getBytes();
+          byte[] byteArr="+PONG\r\n".getBytes();
           outputStream.write(byteArr);
           outputStream.flush();
           outputStream.close();
