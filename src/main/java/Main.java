@@ -16,6 +16,8 @@ public class Main {
           serverSocket.setReuseAddress(true);
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
+
+          System.out.println("+PONG\\r\\n");
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {

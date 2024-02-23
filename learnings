@@ -1,0 +1,13 @@
+4 layers and their famous protocols
+ application : http,smtp,ftp etc
+ transport : tcp,udp
+ network : ip
+ physical : ethernet
+
+tcp
+    -reliable, orders the packets by numbering them and rearranging on arrival
+    -3 way handshake:
+        client starts SYN
+        server ACK+SYN
+        client ACK
+
