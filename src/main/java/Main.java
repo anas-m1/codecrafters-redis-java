@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
   public static void main(String[] args){
@@ -23,11 +25,11 @@ public class Main {
             BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
             String line="";
             while((line=bufferedReader.readLine()) !=null){
-                for(int i=1;i<line.length();i++){
-                    if(line.charAt(i-1)=='\\' && line.charAt(i)=='n'){
-                        System.out.println("got \\n");
-                        printPong(clientSocket);
-                    }
+                Pattern pattern = Pattern.compile(Pattern.quote("ping"));
+                // Create a matcher with the input string
+                Matcher matcher = pattern.matcher(line);
+                while(matcher.find()){
+                    printPong(clientSocket);
                 }
             }
 
