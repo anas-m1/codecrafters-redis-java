@@ -1,5 +1,4 @@
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,23 +17,42 @@ public class Main {
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
 
-            OutputStream outputStream=clientSocket.getOutputStream();
-          byte[] byteArr="+PONG\r\n".getBytes();
-          outputStream.write(byteArr);
-          outputStream.flush();
-          outputStream.close();
+            InputStream inputStream= clientSocket.getInputStream();
+            InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
 
-//          System.out.println("+PONG\\r\\n");
+            BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
+            String line="";
+            while((line=bufferedReader.readLine()) !=null){
+                for(int i=1;i<line.length();i++){
+                    if(line.charAt(i-1)=='\\' && line.charAt(i)=='n'){
+                        System.out.println("got \\n");
+                        printPong(clientSocket);
+                    }
+                }
+            }
+
+//          printPong(clientSocket);
+
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
           try {
             if (clientSocket != null) {
               clientSocket.close();
             }
-          } catch (IOException e) {
+          }
+          catch (Exception e) {
             System.out.println("IOException: " + e.getMessage());
           }
         }
   }
+
+    private static void printPong(Socket clientSocket) throws Exception {
+        OutputStream outputStream=clientSocket.getOutputStream();
+        byte[] byteArr="+PONG\r\n".getBytes();
+        outputStream.write(byteArr);
+        outputStream.flush();
+    }
 }
