@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 public class Main {
   public static void main(String[] args){
 
+      HashMap<String,RedisEntry> redisStore = new HashMap<>();
 
       System.out.println("Logs from your program will appear here!");
       ExecutorService executorService= Executors.newCachedThreadPool();
@@ -24,7 +26,7 @@ public class Main {
 
         while(true){
             clientSocket = serverSocket.accept();
-            ClientHandler clientHandler=new ClientHandler(clientSocket);
+            ClientHandler clientHandler=new ClientHandler(clientSocket,redisStore);
 
             executorService.submit(clientHandler::run);
         }

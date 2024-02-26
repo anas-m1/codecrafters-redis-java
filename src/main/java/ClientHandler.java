@@ -1,20 +1,20 @@
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
 
 public class ClientHandler implements Runnable {
     Socket clientSocket;
+    HashMap<String,RedisEntry> redisStore;
 
-    ClientHandler(Socket socket){
+    ClientHandler(Socket socket,HashMap<String,RedisEntry> store) {
         this.clientSocket=socket;
+        this.redisStore=store;
     };
 
     public void run(){
@@ -49,6 +49,26 @@ public class ClientHandler implements Runnable {
                 else if(actionVerb.equalsIgnoreCase("echo")){
                     String arg=cmdList.get(1);
                     Printer.printEcho(clientSocket,arg);
+                }
+                else if(actionVerb.equalsIgnoreCase("set")){
+                    String key=cmdList.get(1);
+                    String value=cmdList.get(2);
+                    System.out.println("key: " + key + " value: " + value);
+                    RedisEntry entry=new RedisEntry(key,value);
+                    redisStore.put(key,entry);
+                    Printer.printOK(clientSocket);
+                }
+                else if(actionVerb.equalsIgnoreCase("get")){
+                    String key=cmdList.get(1);
+                    System.out.println("key: " + key);
+                    if(redisStore.containsKey(key)){
+                        RedisEntry entry=redisStore.get(key);
+                        System.out.println(entry);
+                        Printer.printEcho(clientSocket,entry.getValue());
+                    }
+                    else{
+                        Printer.printEcho(clientSocket,"$-1\r\n");
+                    }
                 }
 //
 //                Pattern pattern = Pattern.compile(Pattern.quote("ping"));

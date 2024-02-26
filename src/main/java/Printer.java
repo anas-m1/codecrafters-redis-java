@@ -18,4 +18,12 @@ public class Printer {
         outputStream.write(byteArr);
         outputStream.flush();
     }
+
+    static void printOK(Socket clientSocket) throws Exception {
+        OutputStream outputStream=clientSocket.getOutputStream();
+        byte[] byteArr="+OK\r\n".getBytes();
+        outputStream.write(byteArr);
+        outputStream.flush();
+    }
+
 }
