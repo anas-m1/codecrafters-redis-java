@@ -29,22 +29,23 @@ public class ClientHandler implements Runnable {
                 OutputStream outputStream= clientSocket.getOutputStream();
                 outputStream.write(line.getBytes());
                 outputStream.flush();
-                List<String> commandList=new ArrayList<>();
-                System.out.println(line);
-                commandList=parseRedisCommand(line);
-
-                for (String command : commandList){
-                    System.out.println(" " + command + ":here:");
-                }
-
-                String actionVerb=commandList.get(0);
-                if(actionVerb.equalsIgnoreCase("ping")){
-                    Printer.printPong(clientSocket);
-                }
-                else if(actionVerb.equalsIgnoreCase("echo")){
-                    String arg=commandList.get(1);
-                    Printer.printEcho(clientSocket,arg);
-                }
+                return;
+//                List<String> commandList=new ArrayList<>();
+//                System.out.println(line);
+//                commandList=parseRedisCommand(line);
+//
+//                for (String command : commandList){
+//                    System.out.println(" " + command + ":here:");
+//                }
+//
+//                String actionVerb=commandList.get(0);
+//                if(actionVerb.equalsIgnoreCase("ping")){
+//                    Printer.printPong(clientSocket);
+//                }
+//                else if(actionVerb.equalsIgnoreCase("echo")){
+//                    String arg=commandList.get(1);
+//                    Printer.printEcho(clientSocket,arg);
+//                }
 
 //                Pattern pattern = Pattern.compile(Pattern.quote("ping"));
 //                Matcher matcher = pattern.matcher(line);
