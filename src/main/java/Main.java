@@ -22,10 +22,13 @@ public class Main {
         serverSocket.setReuseAddress(true);
         // Wait for connection from client.
 
-        clientSocket = serverSocket.accept();
-        ClientHandler clientHandler=new ClientHandler(clientSocket);
+        while(true){
+            clientSocket = serverSocket.accept();
+            ClientHandler clientHandler=new ClientHandler(clientSocket);
 
-        executorService.submit(clientHandler::run);
+            executorService.submit(clientHandler::run);
+        }
+
 
 //        clientHandler.handle(clientSocket);
 
