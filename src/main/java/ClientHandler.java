@@ -29,12 +29,14 @@ public class ClientHandler implements Runnable {
             while((line=bufferedReader.readLine()) !=null){
 //                *1\r\n$4\r\nping\r\n
                 List<String> cmdList=new ArrayList<>();
+                System.out.println(line+ ": line");
                 if(line.charAt(0)=='*'){
-                    String wordLenLine=bufferedReader.readLine();
-                    int WordLength=parseInt(wordLenLine.substring(1));
-
-                    for(int i=0; i<WordLength; i++){
+                    int numWords=parseInt(line.substring(1));
+                    for(int i=0; i<numWords; i++){
+                        String wordLenLine=bufferedReader.readLine();
+                        int WordLength=parseInt(wordLenLine.substring(1));
                         String word=bufferedReader.readLine();
+                        System.out.println(word+" :word");
                         cmdList.add(word);
                     }
                 }
