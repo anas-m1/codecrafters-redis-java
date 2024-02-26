@@ -14,7 +14,7 @@ public class Printer {
 
     public static void printEcho(Socket clientSocket, String arg) throws IOException {
         OutputStream outputStream=clientSocket.getOutputStream();
-        byte[] byteArr=("$3\r\n"+arg+"\r\n").getBytes();
+        byte[] byteArr=("$"+arg.length()+"\r\n"+arg+"\r\n").getBytes();
         outputStream.write(byteArr);
         outputStream.flush();
     }
