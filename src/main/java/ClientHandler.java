@@ -30,6 +30,11 @@ public class ClientHandler implements Runnable {
                     Printer.printPong(clientSocket);
                 }
 
+                else if(line.split(" ")[0].equalsIgnoreCase("echo")){
+                    String arg=line.split(" ")[1];
+                    Printer.printEcho(clientSocket,arg);
+                }
+
 
 //                List<String> commandList=new ArrayList<>();
 //                System.out.println(line);
@@ -74,65 +79,65 @@ public class ClientHandler implements Runnable {
 
     }
 
-    List<String> parseRedisCommand(String line){
-        System.out.println(line);
-        List<String> cmdList=new ArrayList<>();
-        int numWords=parseInt(line.substring(1,2),10);
-        System.out.println("numWords: " + numWords);
-
-//        *2\r\n$4\r\necho\r\n$3\r\nhey\r\n
-//        *1\r\n$4\r\nping\r\n
-
-        int idx=6;
-        for(int i=0;i<numWords;i++){
-            if(line.charAt(idx)=='$'){
-                int nextBSidx=findIdx(line,idx,'\\');
-                System.out.println(nextBSidx+":next");
-                int wordLen=parseInt(line.substring(idx+1,nextBSidx),10);
-                idx=nextBSidx+4;
-                System.out.println(wordLen+" :wordstart");
-                String word=line.substring(idx,idx+wordLen);
-                System.out.println(idx+wordLen+" :wordend");
-
-                System.out.println(word+":word");
-                cmdList.add(word);
-                idx+=wordLen;
-                idx+=4;
-            }
-        }
-
-//        int idx=8;
-//        while(idx<line.length()){
-//            int wordLength=parseInt(line.substring(idx,idx+1),10);
-//            idx+=5;
-//            cmdList.add(line.substring(idx,idx+wordLength));
-//            idx+=wordLength;
-//            idx+=4;
+//    List<String> parseRedisCommand(String line){
+//        System.out.println(line);
+//        List<String> cmdList=new ArrayList<>();
+//        int numWords=parseInt(line.substring(1,2),10);
+//        System.out.println("numWords: " + numWords);
 //
-//        }
-
-//        int wordStartIdx=-1;
-//        for(int i=0;i<line.length();i++){
-//            char ch= line.charAt(i);
-//            if(ch==' '){
-//                if(wordStartIdx>=0){
-//                   cmdList.add(line.substring(wordStartIdx,i));
-//                }
-//                wordStartIdx=-1;
-//            }
-//            else{
-//                if(wordStartIdx<0){
-//                    wordStartIdx=i;
-//                }
-//            }
+////        *2\r\n$4\r\necho\r\n$3\r\nhey\r\n
+////        *1\r\n$4\r\nping\r\n
 //
-//            if(i==line.length()-1){
-//                cmdList.add(line.substring(wordStartIdx,i+1));
+//        int idx=6;
+//        for(int i=0;i<numWords;i++){
+//            if(line.charAt(idx)=='$'){
+//                int nextBSidx=findIdx(line,idx,'\\');
+//                System.out.println(nextBSidx+":next");
+//                int wordLen=parseInt(line.substring(idx+1,nextBSidx),10);
+//                idx=nextBSidx+4;
+//                System.out.println(wordLen+" :wordstart");
+//                String word=line.substring(idx,idx+wordLen);
+//                System.out.println(idx+wordLen+" :wordend");
+//
+//                System.out.println(word+":word");
+//                cmdList.add(word);
+//                idx+=wordLen;
+//                idx+=4;
 //            }
 //        }
-
-        return cmdList;
-    }
+//
+////        int idx=8;
+////        while(idx<line.length()){
+////            int wordLength=parseInt(line.substring(idx,idx+1),10);
+////            idx+=5;
+////            cmdList.add(line.substring(idx,idx+wordLength));
+////            idx+=wordLength;
+////            idx+=4;
+////
+////        }
+//
+////        int wordStartIdx=-1;
+////        for(int i=0;i<line.length();i++){
+////            char ch= line.charAt(i);
+////            if(ch==' '){
+////                if(wordStartIdx>=0){
+////                   cmdList.add(line.substring(wordStartIdx,i));
+////                }
+////                wordStartIdx=-1;
+////            }
+////            else{
+////                if(wordStartIdx<0){
+////                    wordStartIdx=i;
+////                }
+////            }
+////
+////            if(i==line.length()-1){
+////                cmdList.add(line.substring(wordStartIdx,i+1));
+////            }
+////        }
+//
+//        return cmdList;
+//    }
 
     private int findIdx(String line, int idx, char c) {
         System.out.println(c+ "::fou");
