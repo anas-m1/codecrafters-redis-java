@@ -24,9 +24,10 @@ public class ClientHandler implements Runnable {
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
             BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
             String line="";
-            System.out.println(line+"::line");
+
 
             while((line=bufferedReader.readLine()) !=null){
+                System.out.println(line+"::line");
                 if(line.equalsIgnoreCase("ping")){
                     Printer.printPong(clientSocket);
                 }
