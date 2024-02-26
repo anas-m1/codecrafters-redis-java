@@ -4,7 +4,7 @@ import lombok.Data;
 public class RedisEntry {
     String key;
     String value;
-    Long expiryAt;
+    long expiryAt;
     public RedisEntry(String key, String value) {
         this.key = key;
         this.value = value;
@@ -16,6 +16,6 @@ public class RedisEntry {
     }
 
     public long getExpiryAt() {
-        return expiryAt;
+        return this.expiryAt;
     }
 }
