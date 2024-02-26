@@ -83,11 +83,11 @@ public class ClientHandler implements Runnable {
                         }
                         else{
                             redisStore.remove(key);
-                            Printer.printEcho(clientSocket,"$-1\r\n");
+                            Printer.printNullBulk(clientSocket);
                         }
                     }
                     else{
-                        Printer.printEcho(clientSocket,"$-1\r\n");
+                        Printer.printNullBulk(clientSocket);
                     }
                 }
 

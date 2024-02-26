@@ -26,4 +26,10 @@ public class Printer {
         outputStream.flush();
     }
 
+    static void printNullBulk(Socket clientSocket) throws Exception {
+        OutputStream outputStream=clientSocket.getOutputStream();
+        byte[] byteArr="*-1\r\n".getBytes();
+        outputStream.write(byteArr);
+        outputStream.flush();
+    }
 }
