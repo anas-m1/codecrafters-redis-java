@@ -27,33 +27,27 @@ public class ClientHandler implements Runnable {
 
 
             while((line=bufferedReader.readLine()) !=null){
-                System.out.println(line+"::line");
-                if(line.equalsIgnoreCase("ping")){
+//                *1\r\n$4\r\nping\r\n
+                List<String> cmdList=new ArrayList<>();
+                if(line.charAt(0)=='*'){
+                    String wordLenLine=bufferedReader.readLine();
+                    int WordLength=parseInt(wordLenLine.substring(1));
+
+                    for(int i=0; i<WordLength; i++){
+                        String word=bufferedReader.readLine();
+                        cmdList.add(word);
+                    }
+                }
+
+//
+                String actionVerb=cmdList.get(0);
+                if(actionVerb.equalsIgnoreCase("ping")){
                     Printer.printPong(clientSocket);
                 }
-
-                else if(line.split(" ")[0].equalsIgnoreCase("echo")){
-                    String arg=line.split(" ")[1];
+                else if(actionVerb.equalsIgnoreCase("echo")){
+                    String arg=cmdList.get(1);
                     Printer.printEcho(clientSocket,arg);
                 }
-
-
-//                List<String> commandList=new ArrayList<>();
-//                System.out.println(line);
-//                commandList=parseRedisCommand(line);
-//
-//                for (String command : commandList){
-//                    System.out.println(" " + command + ":here:");
-//                }
-//
-//                String actionVerb=commandList.get(0);
-//                if(actionVerb.equalsIgnoreCase("ping")){
-//                    Printer.printPong(clientSocket);
-//                }
-//                else if(actionVerb.equalsIgnoreCase("echo")){
-//                    String arg=commandList.get(1);
-//                    Printer.printEcho(clientSocket,arg);
-//                }
 //
 //                Pattern pattern = Pattern.compile(Pattern.quote("ping"));
 //                Matcher matcher = pattern.matcher(line);
