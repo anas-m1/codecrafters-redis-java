@@ -3,6 +3,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,8 +54,18 @@ public class ClientHandler implements Runnable {
                 else if(actionVerb.equalsIgnoreCase("set")){
                     String key=cmdList.get(1);
                     String value=cmdList.get(2);
+
                     System.out.println("key: " + key + " value: " + value);
                     RedisEntry entry=new RedisEntry(key,value);
+
+                    if(cmdList.size()>3){
+                        if(cmdList.get(3).equalsIgnoreCase("px")){
+                            long timeToLive=Long.parseLong(cmdList.get(4));
+                            System.out.println("key: " + key + " value: " + value + " timeToLive: " + timeToLive);
+                            long currUNIXts = System.currentTimeMillis();
+                            entry.setExpiryAt(currUNIXts+timeToLive);
+                        }
+                    }
                     redisStore.put(key,entry);
                     Printer.printOK(clientSocket);
                 }
@@ -64,18 +75,19 @@ public class ClientHandler implements Runnable {
                     if(redisStore.containsKey(key)){
                         RedisEntry entry=redisStore.get(key);
                         System.out.println(entry);
-                        Printer.printEcho(clientSocket,entry.getValue());
+                        if(entry.getExpiryAt()>System.currentTimeMillis()){
+                            Printer.printEcho(clientSocket,entry.getValue());
+                        }
+                        else{
+                            redisStore.remove(key);
+                            Printer.printEcho(clientSocket,"$-1\r\n");
+                        }
                     }
                     else{
                         Printer.printEcho(clientSocket,"$-1\r\n");
                     }
                 }
-//
-//                Pattern pattern = Pattern.compile(Pattern.quote("ping"));
-//                Matcher matcher = pattern.matcher(line);
-//                while(matcher.find()){
-//                    Printer.printPong(clientSocket);
-//                }
+
             }
 
             if (clientSocket != null) {
