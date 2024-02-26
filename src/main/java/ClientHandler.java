@@ -24,6 +24,7 @@ public class ClientHandler implements Runnable {
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
             BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
             String line="";
+            System.out.println(line+"::line");
 
             while((line=bufferedReader.readLine()) !=null){
                 if(line.equalsIgnoreCase("ping")){
