@@ -26,10 +26,11 @@ public class ClientHandler implements Runnable {
             String line="";
 
             while((line=bufferedReader.readLine()) !=null){
-                OutputStream outputStream= clientSocket.getOutputStream();
-                outputStream.write(line.getBytes());
-                outputStream.flush();
-                return;
+                if(line.equalsIgnoreCase("ping")){
+                    Printer.printPong(clientSocket);
+                }
+
+
 //                List<String> commandList=new ArrayList<>();
 //                System.out.println(line);
 //                commandList=parseRedisCommand(line);
@@ -46,7 +47,7 @@ public class ClientHandler implements Runnable {
 //                    String arg=commandList.get(1);
 //                    Printer.printEcho(clientSocket,arg);
 //                }
-
+//
 //                Pattern pattern = Pattern.compile(Pattern.quote("ping"));
 //                Matcher matcher = pattern.matcher(line);
 //                while(matcher.find()){
