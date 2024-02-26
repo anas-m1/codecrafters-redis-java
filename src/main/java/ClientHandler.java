@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,9 @@ public class ClientHandler implements Runnable {
             String line="";
 
             while((line=bufferedReader.readLine()) !=null){
-
+                OutputStream outputStream= clientSocket.getOutputStream();
+                outputStream.write(line.getBytes());
+                outputStream.flush();
                 List<String> commandList=new ArrayList<>();
                 System.out.println(line);
                 commandList=parseRedisCommand(line);
