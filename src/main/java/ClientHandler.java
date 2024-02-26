@@ -75,6 +75,8 @@ public class ClientHandler implements Runnable {
                     if(redisStore.containsKey(key)){
                         RedisEntry entry=redisStore.get(key);
                         System.out.println(entry);
+                        System.out.println("hello "+entry.getExpiryAt()+" seconds "+System.currentTimeMillis());
+
                         if(entry.getExpiryAt()>System.currentTimeMillis()){
                             System.out.println(entry.getExpiryAt()+" seconds "+System.currentTimeMillis());
                             Printer.printEcho(clientSocket,entry.getValue());
