@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -18,7 +19,17 @@ public class Main {
       ServerSocket serverSocket = null;
       Socket clientSocket = null;
 
-    int port = 6379;
+      int port = 6379;
+      for(int i=0;i<args.length;i++){
+          String x=args[i];
+          System.out.println(x+" : arg");
+          if(x.equalsIgnoreCase("--port")){
+              port=Integer.parseInt(args[i+1]);
+          }
+      }
+
+      System.out.println(port+" :port");
+
     try {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
