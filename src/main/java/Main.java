@@ -35,6 +35,7 @@ public class Main {
       }
 
       if(serverDetails.getType().equalsIgnoreCase("master")){
+          serverDetails.setType("master");
           serverDetails.setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
           serverDetails.setOffset(0);
       }
