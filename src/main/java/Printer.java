@@ -46,7 +46,7 @@ public class Printer {
             keyValStrBuilder.append(key+":"+val);
             keyValStrBuilder.append(clrf);
         }
-        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder.toString();
+        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder;
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
