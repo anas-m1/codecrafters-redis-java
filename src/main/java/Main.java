@@ -46,11 +46,11 @@ public class Main {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
 
-        System.out.println("hereeeeeeeeeee");
-        if(serverDetails.getType().equalsIgnoreCase("slave")){
-            System.out.println("sending ping");
-            Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
-        }
+//        System.out.println("hereeeeeeeeeee");
+//        if(serverDetails.getType().equalsIgnoreCase("slave")){
+//            System.out.println("sending ping");
+//            Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
+//        }
 
         // Wait for connection from client.
 
