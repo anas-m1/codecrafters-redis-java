@@ -36,21 +36,13 @@ public class Printer {
 
     static void printInfo(Socket clientSocket, HashMap<String, String> infoMap) throws Exception {
         String infoStr="";
-        StringBuilder infoStrBuilder=new StringBuilder();
+        StringBuilder keyValStrBuilder=new StringBuilder();
         String clrf="\r\n";
-//        infoStrBuilder.append("*"+infoMap.keySet().size());
-//        infoStrBuilder.append(clrf);
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
-            infoStrBuilder.append("$");
-            infoStrBuilder.append(key.length()+val.length()+1);
-            infoStrBuilder.append(clrf);
-            infoStrBuilder.append(key);
-            infoStrBuilder.append(":");
-            infoStrBuilder.append(val);
-            infoStrBuilder.append(clrf);
+            keyValStrBuilder.append(key+":"+val);
         }
-        infoStr=infoStrBuilder.toString();
+        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder+clrf;
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
