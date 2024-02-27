@@ -9,7 +9,7 @@ import static java.lang.Integer.parseInt;
 public class ClientHandler implements Runnable {
     Socket clientSocket;
     HashMap<String,RedisEntry> redisStore;
-    MasterServer masterServer;
+    MasterServer masterServerOfSelf;
 
     ClientHandler(Socket socket,HashMap<String,RedisEntry> store) {
         this.clientSocket=socket;
@@ -93,10 +93,10 @@ public class ClientHandler implements Runnable {
                     System.out.println(cmdList.get(i));
                     if(cmdList.get(i).equalsIgnoreCase("info")){
                         HashMap<String,String> infoMap=new HashMap<>();
-                        if(Objects.isNull(masterServer))
-                            infoMap.put("role","slave");
-                        else
+                        if(Objects.isNull(masterServerOfSelf))
                             infoMap.put("role","master");
+                        else
+                            infoMap.put("role","slave");
                         Printer.printInfo(clientSocket,infoMap);
                     }
                 }
@@ -193,6 +193,6 @@ public class ClientHandler implements Runnable {
     }
 
     public void setMasterServer(MasterServer masterServer) {
-        this.masterServer=masterServer;
+        this.masterServerOfSelf=masterServer;
     }
 }
