@@ -118,8 +118,6 @@ public class ClientHandler implements Runnable {
 //        catch (Exception e) {
 //            System.out.println("IOException: " + e.getMessage());
 //        }
-
-
     }
 
 //    List<String> parseRedisCommand(String line){
