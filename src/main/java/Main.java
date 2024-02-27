@@ -47,8 +47,10 @@ public class Main {
         serverSocket.setReuseAddress(true);
 
         if(serverDetails.getType().equalsIgnoreCase("slave")){
+            System.out.println("sending ping");
             Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
         }
+
         // Wait for connection from client.
 
         while(true){
