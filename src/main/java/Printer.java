@@ -59,14 +59,14 @@ public class Printer {
         //            *1\r\n$4\r\nping\r\n
         Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort,10));
 
-        PrintWriter writer = new PrintWriter(
-                new OutputStreamWriter(masterSocket.getOutputStream()));
-        String pingCommand = "*1\r\n$4\r\nPING\r\n";
-        writer.print(pingCommand);
-        writer.flush();
+//        PrintWriter writer = new PrintWriter(
+//                new OutputStreamWriter(masterSocket.getOutputStream()));
+//        String pingCommand = "*1\r\n$4\r\nPING\r\n";
+//        writer.print(pingCommand);
+//        writer.flush();
 
-//        OutputStream outputStream= masterSocket.getOutputStream();
-//        outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
-//        outputStream.flush();
+        OutputStream outputStream= masterSocket.getOutputStream();
+        outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
+        outputStream.flush();
     }
 }
