@@ -46,6 +46,7 @@ public class Printer {
             infoStrBuilder.append(key.length()+val.length()+1);
             infoStrBuilder.append(clrf);
             infoStrBuilder.append(key);
+            infoStrBuilder.append(":");
             infoStrBuilder.append(val);
             infoStrBuilder.append(clrf);
         }
