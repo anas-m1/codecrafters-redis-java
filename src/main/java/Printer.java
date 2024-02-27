@@ -45,7 +45,8 @@ public class Printer {
             infoStrBuilder.append("$");
             infoStrBuilder.append(key.length()+val.length()+1);
             infoStrBuilder.append(clrf);
-            infoStrBuilder.append(key+val);
+            infoStrBuilder.append(key);
+            infoStrBuilder.append(val);
             infoStrBuilder.append(clrf);
         }
         infoStr=infoStrBuilder.toString();
