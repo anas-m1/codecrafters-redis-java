@@ -93,17 +93,19 @@ public class ClientHandler implements Runnable {
                 for(int i=0; i<cmdList.size(); i++){
                     System.out.println(cmdList.get(i));
                     if(cmdList.get(i).equalsIgnoreCase("info")){
-                        HashMap<String,String> infoMap=new HashMap<>();
-                        if(serverDetails.getType().equalsIgnoreCase("master")){
-                            infoMap.put("role","master");
-                            infoMap.put("master_replid",serverDetails.getReplid());
-                            Integer offset=serverDetails.getOffset();
-                            infoMap.put("master_repl_offset",offset.toString());
-                        }
-                        else
-                            infoMap.put("role","slave");
+                        if(cmdList.get(i+1).equalsIgnoreCase("replication")) {
+                            HashMap<String, String> infoMap = new HashMap<>();
+                            System.out.println(serverDetails.getType() + " : serverdetails");
+                            if (serverDetails.getType().equalsIgnoreCase("master")) {
+                                infoMap.put("role", "master");
+                                infoMap.put("master_replid", serverDetails.getReplid());
+                                Integer offset = serverDetails.getOffset();
+                                infoMap.put("master_repl_offset", offset.toString());
+                            } else
+                                infoMap.put("role", "slave");
 
-                        Printer.printInfo(clientSocket,infoMap);
+                            Printer.printInfo(clientSocket, infoMap);
+                        }
                     }
                 }
 
