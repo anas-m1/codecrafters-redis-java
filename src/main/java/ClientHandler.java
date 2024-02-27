@@ -193,6 +193,6 @@ public class ClientHandler implements Runnable {
     }
 
     public void setMasterServer(MasterServer masterServer) {
-        this.masterServer(masterServer);
+        this.masterServer=masterServer;
     }
 }
