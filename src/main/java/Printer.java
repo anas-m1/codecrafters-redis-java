@@ -41,8 +41,9 @@ public class Printer {
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
             keyValStrBuilder.append(key+":"+val);
+            keyValStrBuilder.append(clrf);
         }
-        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder+clrf;
+        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder.toString()+clrf;
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
