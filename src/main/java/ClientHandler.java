@@ -91,6 +91,15 @@ public class ClientHandler implements Runnable {
                     }
                 }
 
+                for(int i=0; i<cmdList.size(); i++){
+                    System.out.println(cmdList.get(i));
+                    if(cmdList.get(i).equalsIgnoreCase("info")){
+                        HashMap<String,String> infoMap=new HashMap<>();
+                        infoMap.put("role","master");
+                        Printer.printInfo(clientSocket,infoMap);
+                    }
+                }
+
             }
 
             if (clientSocket != null) {

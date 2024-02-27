@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
   public static void main(String[] args){
