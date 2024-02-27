@@ -46,8 +46,8 @@ public class Printer {
             keyValStrBuilder.append(key+":"+val);
             keyValStrBuilder.append(clrf);
         }
-        Integer zlen=keyValStrBuilder.toString().length()-2;
-        infoStr="$"+zlen.toString()+clrf+keyValStrBuilder;
+        Integer zlen=keyValStrBuilder.toString().length();
+        infoStr="$"+zlen.toString()+clrf+keyValStrBuilder+clrf;
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
