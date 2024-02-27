@@ -1,7 +1,7 @@
 public class MasterServer {
-    private int masterHost;
-    private int masterPort;
-    public MasterServer(int masterHost, int masterPort) {
+    private String masterHost;
+    private String masterPort;
+    public MasterServer(String masterHost, String masterPort) {
         this.masterHost = masterHost;
         this.masterPort = masterPort;
     }

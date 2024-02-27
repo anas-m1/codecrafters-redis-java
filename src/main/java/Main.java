@@ -27,10 +27,10 @@ public class Main {
               port=Integer.parseInt(args[i+1]);
           }
           else if(x.equalsIgnoreCase("--replicaof")){
-              int masterHost;
-              int masterPort;
-              masterHost=Integer.parseInt(args[i+1]);
-              masterPort=Integer.parseInt(args[i+2]);
+              String masterHost;
+              String masterPort;
+              masterHost=args[i+1];
+              masterPort=args[i+2];
               masterServer=new MasterServer(masterHost,masterPort);
           }
       }
