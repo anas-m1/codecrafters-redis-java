@@ -38,8 +38,8 @@ public class Printer {
         String infoStr="";
         StringBuilder infoStrBuilder=new StringBuilder();
         String clrf="\r\n";
-        infoStrBuilder.append("*"+infoMap.keySet().size());
-        infoStrBuilder.append(clrf);
+//        infoStrBuilder.append("*"+infoMap.keySet().size());
+//        infoStrBuilder.append(clrf);
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
             infoStrBuilder.append("$");
