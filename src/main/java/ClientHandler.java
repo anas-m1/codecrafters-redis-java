@@ -100,10 +100,10 @@ public class ClientHandler implements Runnable {
 
                                 infoMap.put("master_replid:", serverDetails.getReplid());
 //                                Integer offset = serverDetails.getOffset();
-                                infoMap.put("master_repl_offset", String.valueOf(serverDetails.getOffset()));
-                                infoMap.put("role", "master");
+                                infoMap.put("master_repl_offset:", String.valueOf(serverDetails.getOffset()));
+                                infoMap.put("role:", "master");
                             } else
-                                infoMap.put("role", "slave");
+                                infoMap.put("role:", "slave");
 
                             Printer.printInfo(clientSocket, infoMap);
                         }
