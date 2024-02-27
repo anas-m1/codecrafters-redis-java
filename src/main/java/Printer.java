@@ -55,7 +55,7 @@ public class Printer {
 
     public static void sendPing(String masterHost, String masterPort) throws IOException {
         //            *1\r\n$4\r\nping\r\n
-        Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort));
+        Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort,10));
         OutputStream outputStream= masterSocket.getOutputStream();
         outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
         outputStream.flush();

@@ -30,7 +30,7 @@ public class Main {
           else if(x.equalsIgnoreCase("--replicaof")){
               serverDetails.setType("slave");
               serverDetails.setMasterHost(args[i+1]);
-              serverDetails.setMasterPort(args[i+1]);
+              serverDetails.setMasterPort(args[i+2]);
           }
       }
 
