@@ -97,13 +97,13 @@ public class ClientHandler implements Runnable {
                             HashMap<String, String> infoMap = new HashMap<>();
                             System.out.println(serverDetails.getType() + " : serverdetails");
                             if (serverDetails.getType().equalsIgnoreCase("master")) {
-                                infoMap.put("role" , "master");
+                                infoMap.put("role:" , "master");
                                 infoMap.put("master_replid:", serverDetails.getReplid());
 //                                Integer offset = serverDetails.getOffset();
-                                infoMap.put("master_repl_offset", String.valueOf(serverDetails.getOffset()));
+                                infoMap.put("master_repl_offset:", String.valueOf(serverDetails.getOffset()));
 
                             } else
-                                infoMap.put("role", "slave");
+                                infoMap.put("role:", "slave");
 
                             Printer.printInfo(clientSocket, infoMap);
                         }
