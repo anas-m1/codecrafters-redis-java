@@ -46,7 +46,7 @@ public class Printer {
             keyValStrBuilder.append(key+":"+val);
             keyValStrBuilder.append(clrf);
         }
-        Integer zlen=keyValStrBuilder.toString().length();
+        Integer zlen=keyValStrBuilder.toString().length()-4;
         infoStr="$"+zlen.toString()+clrf+keyValStrBuilder;
 
         System.out.println(infoStr+":infostr");
