@@ -98,7 +98,7 @@ public class ClientHandler implements Runnable {
                             infoMap.put("role","master");
                             infoMap.put("master_replid",serverDetails.getReplid());
                             Integer offset=serverDetails.getOffset();
-                            infoMap.put("master_replid",offset.toString());
+                            infoMap.put("master_repl_offset",offset.toString());
                         }
                         else
                             infoMap.put("role","slave");
