@@ -38,12 +38,14 @@ public class Printer {
         String infoStr="";
         StringBuilder keyValStrBuilder=new StringBuilder();
         String clrf="\r\n";
+        int bulkStrLen=0;
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
             keyValStrBuilder.append(key+":"+val);
+            bulkStrLen+=(key.length()+val.length()+1);
             keyValStrBuilder.append(clrf);
         }
-        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder.toString()+clrf;
+        infoStr="$"+bulkStrLen+clrf+keyValStrBuilder.toString();
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
