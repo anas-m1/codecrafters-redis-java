@@ -38,6 +38,8 @@ public class Printer {
         String infoStr="";
         StringBuilder infoStrBuilder=new StringBuilder();
         String clrf="\r\n";
+        infoStrBuilder.append("*"+infoMap.keySet().size());
+        infoStrBuilder.append(clrf);
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
             infoStrBuilder.append("$");
@@ -48,6 +50,7 @@ public class Printer {
         }
         infoStr=infoStrBuilder.toString();
 
+        System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr=infoStr.getBytes();
         outputStream.write(byteArr);

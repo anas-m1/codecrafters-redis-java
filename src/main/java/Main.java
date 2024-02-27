@@ -31,6 +31,7 @@ public class Main {
               serverDetails.setType("slave");
               serverDetails.setMasterHost(args[i+1]);
               serverDetails.setMasterPort(args[i+1]);
+
           }
       }
 
