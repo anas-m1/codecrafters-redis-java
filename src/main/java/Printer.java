@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -56,8 +58,15 @@ public class Printer {
     public static void sendPing(String masterHost, String masterPort) throws IOException {
         //            *1\r\n$4\r\nping\r\n
         Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort,10));
-        OutputStream outputStream= masterSocket.getOutputStream();
-        outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
-        outputStream.flush();
+
+        PrintWriter writer = new PrintWriter(
+                new OutputStreamWriter(masterSocket.getOutputStream()));
+        String pingCommand = "*1\r\n$4\r\nPING\r\n";
+        writer.print(pingCommand);
+        writer.flush();
+
+//        OutputStream outputStream= masterSocket.getOutputStream();
+//        outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
+//        outputStream.flush();
     }
 }
