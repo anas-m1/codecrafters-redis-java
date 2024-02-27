@@ -2,16 +2,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
 public class ClientHandler implements Runnable {
     Socket clientSocket;
     HashMap<String,RedisEntry> redisStore;
+    MasterServer masterServer;
 
     ClientHandler(Socket socket,HashMap<String,RedisEntry> store) {
         this.clientSocket=socket;
@@ -95,7 +93,10 @@ public class ClientHandler implements Runnable {
                     System.out.println(cmdList.get(i));
                     if(cmdList.get(i).equalsIgnoreCase("info")){
                         HashMap<String,String> infoMap=new HashMap<>();
-                        infoMap.put("role","master");
+                        if(Objects.isNull(masterServer))
+                            infoMap.put("role","slave");
+                        else
+                            infoMap.put("role","master");
                         Printer.printInfo(clientSocket,infoMap);
                     }
                 }
@@ -189,5 +190,9 @@ public class ClientHandler implements Runnable {
             }
         }
         return -1;
+    }
+
+    public void setMasterServer(MasterServer masterServer) {
+        this.masterServer(masterServer);
     }
 }
