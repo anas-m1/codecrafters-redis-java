@@ -98,7 +98,7 @@ public class ClientHandler implements Runnable {
                             System.out.println(serverDetails.getType() + " : serverdetails");
                             if (serverDetails.getType().equalsIgnoreCase("master")) {
 
-                                infoMap.put("master_replid", serverDetails.getReplid());
+                                infoMap.put("master_replid:", serverDetails.getReplid());
 //                                Integer offset = serverDetails.getOffset();
                                 infoMap.put("master_repl_offset", String.valueOf(serverDetails.getOffset()));
                                 infoMap.put("role", "master");
