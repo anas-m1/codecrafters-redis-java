@@ -31,7 +31,6 @@ public class Main {
               serverDetails.setType("slave");
               serverDetails.setMasterHost(args[i+1]);
               serverDetails.setMasterPort(args[i+1]);
-
           }
       }
 
@@ -46,6 +45,10 @@ public class Main {
     try {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
+
+        if(serverDetails.getType().equalsIgnoreCase("slave")){
+            Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
+        }
         // Wait for connection from client.
 
         while(true){

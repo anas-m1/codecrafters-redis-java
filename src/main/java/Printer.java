@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -38,19 +39,25 @@ public class Printer {
         String infoStr="";
         StringBuilder keyValStrBuilder=new StringBuilder();
         String clrf="\r\n";
-        int bulkStrLen=0;
         for(String key : infoMap.keySet()){
             String val=infoMap.get(key);
             keyValStrBuilder.append(key+":"+val);
-            bulkStrLen+=(key.length()+val.length()+1);
             keyValStrBuilder.append(clrf);
         }
-        infoStr="$"+bulkStrLen+clrf+keyValStrBuilder.toString();
+        infoStr="$"+keyValStrBuilder.length()+clrf+keyValStrBuilder.toString();
 
         System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr=infoStr.getBytes();
         outputStream.write(byteArr);
+        outputStream.flush();
+    }
+
+    public static void sendPing(String masterHost, String masterPort) throws IOException {
+        //            *1\r\n$4\r\nping\r\n
+        Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort));
+        OutputStream outputStream= masterSocket.getOutputStream();
+        outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
         outputStream.flush();
     }
 }
