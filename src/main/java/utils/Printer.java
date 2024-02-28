@@ -1,7 +1,6 @@
 package utils;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -91,21 +90,27 @@ public class Printer {
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
         outputStream.flush();
 
-        String emptyRDBbase64="524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2";
-        byte[] byteArr=new byte[emptyRDBbase64.length()/2];
-        for(int i=0;i<emptyRDBbase64.length();i+=2){
-            String a=emptyRDBbase64.substring(i,i+1);
-            String b=emptyRDBbase64.substring(i+1,i+2);
-            String y=new BigInteger(a,16).toString(2);
-            String z=new BigInteger(b,16).toString(2);
-            String x=y+z;
-            System.out.println(x+":x");
-            byteArr[i/2]=x.getBytes()[0];
-        }
+        FileWriter writer=new FileWriter("./emptyFile");
+        writer.write("");
+        writer.close();
+        FileInputStream fileInputStream=new FileInputStream("./emptyFile");
+        byte[] byteArr= fileInputStream.readAllBytes();
 
-        String x=byteArr.toString();
-        outputStream.write(("$"+x.length()+clrf+x).getBytes());
+//        String emptyRDBbase64="524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2";
+//        byte[] byteArr=new byte[emptyRDBbase64.length()/2];
+//        for(int i=0;i<emptyRDBbase64.length();i+=2){
+//            String a=emptyRDBbase64.substring(i,i+1);
+//            String b=emptyRDBbase64.substring(i+1,i+2);
+//            String y=new BigInteger(a,16).toString(2);
+//            String z=new BigInteger(b,16).toString(2);
+//            String x=y+z;
+//            System.out.println(x+":x");
+//            byteArr[i/2]=x.getBytes()[0];
+//        }
+//
+//        String x=byteArr.toString();
+        String rdbStr=byteArr.toString();
+        outputStream.write(("$"+rdbStr.length()+clrf+rdbStr).getBytes());
         outputStream.flush();
-
     }
 }
