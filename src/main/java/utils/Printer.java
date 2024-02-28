@@ -2,6 +2,7 @@ package utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,9 +94,11 @@ public class Printer {
         String emptyRDBbase64="524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2";
         byte[] byteArr=new byte[emptyRDBbase64.length()/2];
         for(int i=0;i<emptyRDBbase64.length();i+=2){
-            Integer a=Integer.parseInt(emptyRDBbase64.substring(i,i+1),2);
-            Integer b=Integer.parseInt(emptyRDBbase64.substring(i+1,i+2),2);
-            String x=String.valueOf(a)+String.valueOf(b);
+            String a=emptyRDBbase64.substring(i,i+1);
+            String b=emptyRDBbase64.substring(i+1,i+2);
+            String y=new BigInteger(a,16).toString(2);
+            String z=new BigInteger(b,16).toString(2);
+            String x=y+z;
             System.out.println(x+":x");
             byteArr[i/2]=x.getBytes()[0];
         }
