@@ -55,18 +55,18 @@ public class Printer {
         outputStream.flush();
     }
 
-    public static void sendPing(String masterHost, String masterPort) throws IOException {
-        //            *1\r\n$4\r\nping\r\n
-        Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort,10));
-
-//        PrintWriter writer = new PrintWriter(
-//                new OutputStreamWriter(masterSocket.getOutputStream()));
-//        String pingCommand = "*1\r\n$4\r\nPING\r\n";
-//        writer.print(pingCommand);
-//        writer.flush();
-
-        OutputStream outputStream= masterSocket.getOutputStream();
+    public static void sendPing(Socket socket) throws IOException {
+        OutputStream outputStream= socket.getOutputStream();
         outputStream.write("*1\r\n$4\r\nping\r\n".getBytes());
+        outputStream.flush();
+    }
+
+    public static void sendReplConfigToMaster(Socket socket, int port) throws IOException {
+        OutputStream outputStream= socket.getOutputStream();
+        int portLen= String.valueOf(port).length();
+        outputStream.write(("*3\r\n$8\r\nREPLCONF\r\n$14\r\nlistening-port\r\n$"+portLen+"\r\n"+String.valueOf(port)+"\r\n").getBytes());
+        outputStream.flush();
+        outputStream.write(("*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n").getBytes());
         outputStream.flush();
     }
 }
