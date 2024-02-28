@@ -85,6 +85,7 @@ public class Printer {
     public static void respondToPsyncFromSlave(Socket clientSocket, String replid, int offset) throws IOException {
         OutputStream outputStream=clientSocket.getOutputStream();
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
+
         outputStream.flush();
     }
 }
