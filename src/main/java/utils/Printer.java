@@ -100,6 +100,7 @@ public class Printer {
 
     public static void sendCommand(Socket socket, String respMsg) throws IOException {
         OutputStream outputStream=socket.getOutputStream();
+        System.out.println("resp msg: " + respMsg);
         outputStream.write(respMsg.getBytes());
         outputStream.flush();
     }
