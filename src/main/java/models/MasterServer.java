@@ -42,7 +42,10 @@ public class MasterServer extends Server{
         this.setCommandQueue=new LinkedList<>();
     }
 
-    public void addToSetCommandQueue(String respStr) {
+    public void addToSetCommandQueue(String respStr) throws IOException {
         this.setCommandQueue.add(respStr);
+        for(Socket slaveSocket : slaveSockets){
+            Printer.sendCommand(slaveSocket,respStr);
+        }
     }
 }
