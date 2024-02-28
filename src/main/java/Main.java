@@ -53,7 +53,7 @@ public class Main {
         serverSocket.setReuseAddress(true);
 
         if(serverDetails.getType().equalsIgnoreCase("slave")){
-            slaveServer.handshakeWithMaster();
+            ((SlaveServer) serverDetails).handshakeWithMaster();
         }
 
         // Wait for connection from client.
