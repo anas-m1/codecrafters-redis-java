@@ -32,16 +32,18 @@ public class Main {
               port=Integer.parseInt(args[i+1]);
           }
           else if(x.equalsIgnoreCase("--replicaof")){
-              slaveServer=new SlaveServer();
-              slaveServer.setMasterHost(args[i+1]);
-              slaveServer.setMasterPort(args[i+2]);
+              serverDetails=new SlaveServer();
+              serverDetails.setType("slave");
+              ((SlaveServer) serverDetails).setMasterHost(args[i+1]);
+              ((SlaveServer) serverDetails).setMasterPort(args[i+2]);
           }
       }
 
-      if(Objects.isNull(slaveServer)){
-          masterServer=new MasterServer();
-          masterServer.setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
-          masterServer.setOffset(0);
+      if(Objects.isNull(serverDetails)){
+          serverDetails=new MasterServer();
+          serverDetails.setType("master");
+          ((MasterServer) serverDetails).setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
+          ((MasterServer) serverDetails).setOffset(0);
       }
 
       System.out.println(port+" :port");
@@ -50,7 +52,7 @@ public class Main {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
 
-        if(!Objects.isNull(slaveServer)){
+        if(serverDetails.getType().equalsIgnoreCase("slave")){
             slaveServer.handshakeWithMaster();
         }
 

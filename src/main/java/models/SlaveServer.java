@@ -24,7 +24,4 @@ public class SlaveServer extends Server {
         infoMap.put("role", "slave");
         Printer.printInfo(clientSocket, infoMap);
     }
-
-
-
 }
