@@ -35,7 +35,7 @@ public class Main {
           }
       }
 
-      serverDetails.setSelfServerPort(port);
+
 
       if(Objects.isNull(serverDetails)){
           serverDetails=new MasterServer();
@@ -43,6 +43,8 @@ public class Main {
           ((MasterServer) serverDetails).setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
           ((MasterServer) serverDetails).setOffset(0);
       }
+
+      serverDetails.setSelfServerPort(port);
 
       System.out.println(port+" :port");
 
