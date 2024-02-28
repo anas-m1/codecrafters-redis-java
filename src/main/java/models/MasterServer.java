@@ -19,7 +19,7 @@ public class MasterServer extends Server{
     @Override
     public void sendReplicationDetailsToClient(Socket clientSocket) throws Exception {
         HashMap<String,String> infoMap = new HashMap<>();
-        infoMap.put("role" , "master");
+        infoMap.put("role", "master");
         infoMap.put("master_replid", this.getReplid());
         infoMap.put("master_repl_offset", String.valueOf(this.getOffset()));
         Printer.printInfo(clientSocket, infoMap);
