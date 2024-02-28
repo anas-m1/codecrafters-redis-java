@@ -20,11 +20,7 @@ public class Main {
       Socket clientSocket = null;
 
       int port = 6379;
-//      null if self is master
-      MasterServer masterServer = null;
-      SlaveServer slaveServer = null;
       Server serverDetails=null;
-//      MasterServerOfSelf masterServerOfSelf=null;
       for(int i=0;i<args.length;i++){
           String x=args[i];
           System.out.println(x+" : arg");
