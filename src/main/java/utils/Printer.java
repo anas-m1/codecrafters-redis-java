@@ -3,7 +3,9 @@ package utils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Printer {
     static String clrf="\r\n";
@@ -86,10 +88,16 @@ public class Printer {
     public static void respondToPsyncFromSlave(Socket clientSocket, String replid, int offset) throws IOException {
         OutputStream outputStream=clientSocket.getOutputStream();
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
-
         outputStream.flush();
+
         String emptyRDBbase64="524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2";
-        outputStream.write(("$"+emptyRDBbase64.length()+clrf+emptyRDBbase64).getBytes());
+        List<Byte> byteList=new ArrayList<>();
+        byte[] byteArr=new byte[emptyRDBbase64.length()/2];
+        for(int i=0;i<emptyRDBbase64.length();i+=2){
+            byteArr[i/2]=emptyRDBbase64.substring(i,i+2).getBytes()[0];
+        }
+        outputStream.write(byteArr);
+        outputStream.flush();
 
     }
 }
