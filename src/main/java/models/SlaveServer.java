@@ -5,6 +5,7 @@ import utils.Printer;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 @Data
 public class SlaveServer extends Server {
@@ -16,4 +17,14 @@ public class SlaveServer extends Server {
         Printer.sendPing(masterSocket);
         Printer.sendReplConfigToMaster(masterSocket, masterSocket.getPort());
     }
+
+    @Override
+    public void sendReplicationDetailsToClient(Socket clientSocket) throws Exception {
+        HashMap<String,String> infoMap = new HashMap<>();
+        infoMap.put("role", "slave");
+        Printer.printInfo(clientSocket, infoMap);
+    }
+
+
+
 }
