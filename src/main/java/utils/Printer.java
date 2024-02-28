@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Printer {
+    static String clrf="\r\n";
 
     public static void printPong(Socket clientSocket) throws Exception {
         OutputStream outputStream=clientSocket.getOutputStream();
@@ -87,5 +88,8 @@ public class Printer {
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
 
         outputStream.flush();
+        String emptyRDBbase64="UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
+        outputStream.write(("$"+emptyRDBbase64.length()+clrf+emptyRDBbase64).getBytes());
+
     }
 }
