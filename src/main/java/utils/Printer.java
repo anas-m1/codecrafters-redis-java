@@ -89,14 +89,15 @@ public class Printer {
     public static void respondToPsyncFromSlave(Socket clientSocket, String replid, int offset) throws IOException {
         OutputStream outputStream=clientSocket.getOutputStream();
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
-        outputStream.flush();
+//        outputStream.flush();
 
         String base64str="UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
         int lenrdbBytesStr=rdbBytes.length;
 
-        System.out.println(rdbBytes.toString()+" :rdbbytesstr");
-        outputStream.write(("$"+lenrdbBytesStr+clrf+rdbBytes.toString()).getBytes());
+        System.out.println(rdbBytes[0]+" :rdbbytesstr");
+        outputStream.write(("$"+lenrdbBytesStr+clrf).getBytes());
+        outputStream.write(rdbBytes);
         outputStream.flush();
     }
 }
