@@ -5,10 +5,7 @@ import utils.Printer;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @Data
 public class MasterServer extends Server{
@@ -42,5 +39,10 @@ public class MasterServer extends Server{
 
     public MasterServer(){
         this.slaveSockets=new ArrayList<>();
+        this.setCommandQueue=new LinkedList<>();
+    }
+
+    public void addToSetCommandQueue(String respStr) {
+        this.setCommandQueue.add(respStr);
     }
 }

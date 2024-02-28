@@ -62,10 +62,7 @@ public class ClientHandler implements Runnable {
 
                     if(serverDetails.getType().equalsIgnoreCase("master")){
                         List<String> strList = cmdList.subList(0,2);
-                        Queue<String> setCommandQueue=new LinkedList<>();
-                        setCommandQueue.add(RedisParser.getRespStr(strList));
-
-                        ((MasterServer)serverDetails).setSetCommandQueue(setCommandQueue);
+                        ((MasterServer)serverDetails).addToSetCommandQueue(RedisParser.getRespStr(strList));
                     }
 
                     System.out.println("key: " + key + " value: " + value);
