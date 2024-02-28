@@ -21,6 +21,10 @@ public class Main {
 
       int port = 6379;
       Server serverDetails=null;
+      String serverType="master";
+      String masterHost="localhost";
+      int masterPort=port;
+
       for(int i=0;i<args.length;i++){
           String x=args[i];
           System.out.println(x+" : arg");
@@ -28,20 +32,23 @@ public class Main {
               port=Integer.parseInt(args[i+1]);
           }
           else if(x.equalsIgnoreCase("--replicaof")){
-              serverDetails=new SlaveServer();
-              serverDetails.setType("slave");
-              ((SlaveServer) serverDetails).setMasterHost(args[i+1]);
-              ((SlaveServer) serverDetails).setMasterPort(args[i+2]);
+              serverType="slave";
+              masterHost=args[i+1];
+              masterPort=Integer.parseInt(args[i+2]);
           }
       }
 
-
-
-      if(Objects.isNull(serverDetails)){
+      if(serverType=="master"){
           serverDetails=new MasterServer();
           serverDetails.setType("master");
           ((MasterServer) serverDetails).setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
           ((MasterServer) serverDetails).setOffset(0);
+      }
+      else{
+          serverDetails=new SlaveServer();
+          serverDetails.setType("slave");
+          ((SlaveServer) serverDetails).setMasterHost(masterHost);
+          ((SlaveServer) serverDetails).setMasterPort(masterPort);
       }
 
       serverDetails.setSelfServerPort(port);
@@ -69,6 +76,4 @@ public class Main {
         throw new RuntimeException(e);
     }
   }
-
-
 }
