@@ -90,6 +90,9 @@ public class ClientHandler implements Runnable {
                         Printer.printNullBulk(clientSocket);
                     }
                 }
+                else if(actionVerb.equalsIgnoreCase("replconf")){
+                    Printer.respondToReplConfFromClient(clientSocket);
+                }
 
                 for (int i = 0; i < cmdList.size(); i++) {
                     System.out.println(cmdList.get(i));

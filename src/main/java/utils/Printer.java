@@ -75,4 +75,10 @@ public class Printer {
         outputStream.write(("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n").getBytes());
         outputStream.flush();
     }
+
+    public static void respondToReplConfFromClient(Socket clientSocket) throws IOException {
+        OutputStream outputStream=clientSocket.getOutputStream();
+        outputStream.write("+OK\r\n".getBytes());
+        outputStream.flush();
+    }
 }
