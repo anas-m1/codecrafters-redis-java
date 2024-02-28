@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,25 +91,12 @@ public class Printer {
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
         outputStream.flush();
 
-        FileWriter writer=new FileWriter("./emptyFile");
-        writer.write("");
-        writer.close();
-        FileInputStream fileInputStream=new FileInputStream("./emptyFile");
-        byte[] byteArr= fileInputStream.readAllBytes();
+        String base64str="";
+        byte[] rdbBytes=Base64.getDecoder().decode(base64str);
+        int lenrdbBytesStr=rdbBytes.toString().length();
 
-        String rdbStr=byteArr.toString();
-
-        String binStr="01010010010001010100010001001001010100110011000000110000001100010011000111111010000010010111001001100101011001000110100101110011001011010111011001100101011100100000010100110111001011100011001000101110001100001111101000001010011100100110010101100100011010010111001100101101011000100110100101110100011100111100000001000000111110100000010101100011011101000110100101101101011001011100001001101101000010001011110001100101111110100000100001110101011100110110010101100100001011010110110101100101011011011100001010110000110001000001000000000000111110100000100001100001011011110110011000101101011000100110000101110011011001011100000000000000111111111111000001101110001110111111111011000000111111110101101010100010";
-        int numBytes=binStr.length()/4;
-
-        byte [] ans=new byte[numBytes];
-        for(int i=0;i<binStr.length();i+=4){
-            String k=binStr.substring(i,i+4);
-            ans[i/4]= Byte.parseByte(k,2);
-        }
-
-        outputStream.write(("$"+numBytes+clrf).getBytes());
-        outputStream.write(ans);
+        outputStream.write(("$"+lenrdbBytesStr+clrf).getBytes());
+        outputStream.write(rdbBytes);
         outputStream.flush();
     }
 }
