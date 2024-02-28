@@ -91,19 +91,21 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 else if(actionVerb.equalsIgnoreCase("replconf")){
-                    Printer.respondToReplConfFromClient(clientSocket);
+                    Printer.respondToReplConfFromSlave(clientSocket);
+                }
+                else if(actionVerb.equalsIgnoreCase("PSYNC")){
+                    ((MasterServer)serverDetails).respondToPsyncFromSlave(clientSocket);
+//                    Printer.respondToPsyncFromSlave(clientSocket);
                 }
 
                 for (int i = 0; i < cmdList.size(); i++) {
                     System.out.println(cmdList.get(i));
                     if (cmdList.get(i).equalsIgnoreCase("info")) {
                         if (cmdList.get(i + 1).equalsIgnoreCase("replication")) {
-                            HashMap<String, String> infoMap = new HashMap<>();
                             serverDetails.sendReplicationDetailsToClient(this.clientSocket);
                         }
                     }
                 }
-
             }
 
             if (clientSocket != null) {

@@ -76,9 +76,15 @@ public class Printer {
         outputStream.flush();
     }
 
-    public static void respondToReplConfFromClient(Socket clientSocket) throws IOException {
+    public static void respondToReplConfFromSlave(Socket clientSocket) throws IOException {
         OutputStream outputStream=clientSocket.getOutputStream();
         outputStream.write("+OK\r\n".getBytes());
+        outputStream.flush();
+    }
+
+    public static void respondToPsyncFromSlave(Socket clientSocket, String replid, int offset) throws IOException {
+        OutputStream outputStream=clientSocket.getOutputStream();
+        outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
         outputStream.flush();
     }
 }

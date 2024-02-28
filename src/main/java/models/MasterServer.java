@@ -19,4 +19,8 @@ public class MasterServer extends Server{
         infoMap.put("master_repl_offset", String.valueOf(this.getOffset()));
         Printer.printInfo(clientSocket, infoMap);
     }
+
+    public void respondToPsyncFromSlave(Socket clientSocket) throws Exception {
+        Printer.respondToPsyncFromSlave(clientSocket,this.replid,this.offset);
+    }
 }
