@@ -66,7 +66,7 @@ public class ClientHandler implements Runnable {
                     }
 
                     System.out.println("key: " + key + " value: " + value);
-                    RedisEntry entry = new RedisEntry(key, value);
+                    RedisEntry entry = new RedisEntry(key, value) ;
 
                     if (cmdList.size() > 3) {
                         if (cmdList.get(3).equalsIgnoreCase("px")) {
