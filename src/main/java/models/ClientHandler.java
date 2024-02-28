@@ -1,5 +1,6 @@
-import jdk.jfr.BooleanFlag;
-import org.springframework.context.annotation.Bean;
+package models;
+
+import utils.Printer;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,7 +15,7 @@ public class ClientHandler implements Runnable {
     public Socket clientSocket;
     HashMap<String,RedisEntry> redisStore;
 
-    ClientHandler(Socket socket, HashMap<String,RedisEntry> store, Server serverDetails) {
+    public ClientHandler(Socket socket, HashMap<String,RedisEntry> store, Server serverDetails) {
         this.clientSocket=socket;
         this.redisStore=store;
         this.serverDetails=serverDetails;

@@ -1,3 +1,6 @@
+import models.*;
+import utils.Printer;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,7 +12,7 @@ import java.util.concurrent.Executors;
 public class Main {
   public static void main(String[] args){
 
-      HashMap<String,RedisEntry> redisStore = new HashMap<>();
+      HashMap<String, RedisEntry> redisStore = new HashMap<>();
 
       System.out.println("Logs from your program will appear here!");
       ExecutorService executorService= Executors.newCachedThreadPool();
@@ -18,8 +21,9 @@ public class Main {
 
       int port = 6379;
 //      null if self is master
-      Server serverDetails=new Server();
-      serverDetails.setType("master");
+      MasterServer masterServer = null;
+      SlaveServer slaveServer = null;
+      Server serverDetails=null;
 //      MasterServerOfSelf masterServerOfSelf=null;
       for(int i=0;i<args.length;i++){
           String x=args[i];
@@ -28,16 +32,16 @@ public class Main {
               port=Integer.parseInt(args[i+1]);
           }
           else if(x.equalsIgnoreCase("--replicaof")){
-              serverDetails.setType("slave");
-              serverDetails.setMasterHost(args[i+1]);
-              serverDetails.setMasterPort(args[i+2]);
+              slaveServer=new SlaveServer();
+              slaveServer.setMasterHost(args[i+1]);
+              slaveServer.setMasterPort(args[i+2]);
           }
       }
 
-      if(serverDetails.getType().equalsIgnoreCase("master")){
-          serverDetails.setType("master");
-          serverDetails.setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
-          serverDetails.setOffset(0);
+      if(Objects.isNull(slaveServer)){
+          masterServer=new MasterServer();
+          masterServer.setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
+          masterServer.setOffset(0);
       }
 
       System.out.println(port+" :port");
@@ -46,17 +50,11 @@ public class Main {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
 
-//        System.out.println("hereeeeeeeeeee");
-        if(serverDetails.getType().equalsIgnoreCase("slave")){
-            System.out.println("sending ping");
-//            SlaveServer server = new SlaveServer();
-//            server.
-            Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
-//            Printer.replConfSendConfigToMaster();
+        if(!Objects.isNull(slaveServer)){
+            slaveServer.handshakeWithMaster();
         }
 
         // Wait for connection from client.
-
         while(true){
             clientSocket = serverSocket.accept();
             ClientHandler clientHandler=new ClientHandler(clientSocket,redisStore,serverDetails);

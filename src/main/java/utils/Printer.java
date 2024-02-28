@@ -1,14 +1,13 @@
+package utils;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
 public class Printer {
 
-    static void printPong(Socket clientSocket) throws Exception {
+    public static void printPong(Socket clientSocket) throws Exception {
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr="+PONG\r\n".getBytes();
         outputStream.write(byteArr);
@@ -23,21 +22,21 @@ public class Printer {
         outputStream.flush();
     }
 
-    static void printOK(Socket clientSocket) throws Exception {
+    public static void printOK(Socket clientSocket) throws Exception {
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr="+OK\r\n".getBytes();
         outputStream.write(byteArr);
         outputStream.flush();
     }
 
-    static void printNullBulk(Socket clientSocket) throws Exception {
+    public static void printNullBulk(Socket clientSocket) throws Exception {
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr="*-1\r\n".getBytes();
         outputStream.write(byteArr);
         outputStream.flush();
     }
 
-    static void printInfo(Socket clientSocket, HashMap<String, String> infoMap) throws Exception {
+    public static void printInfo(Socket clientSocket, HashMap<String, String> infoMap) throws Exception {
         String infoStr="";
         StringBuilder keyValStrBuilder=new StringBuilder();
         String clrf="\r\n";
