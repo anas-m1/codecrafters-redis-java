@@ -18,7 +18,7 @@ public class Main {
 
       int port = 6379;
 //      null if self is master
-      ServerDetails serverDetails=new ServerDetails();
+      Server serverDetails=new Server();
       serverDetails.setType("master");
 //      MasterServerOfSelf masterServerOfSelf=null;
       for(int i=0;i<args.length;i++){
@@ -49,7 +49,10 @@ public class Main {
 //        System.out.println("hereeeeeeeeeee");
         if(serverDetails.getType().equalsIgnoreCase("slave")){
             System.out.println("sending ping");
+//            SlaveServer server = new SlaveServer();
+//            server.
             Printer.sendPing(serverDetails.getMasterHost(),serverDetails.getMasterPort());
+//            Printer.replConfSendConfigToMaster();
         }
 
         // Wait for connection from client.

@@ -1,3 +1,6 @@
+import jdk.jfr.BooleanFlag;
+import org.springframework.context.annotation.Bean;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -7,11 +10,11 @@ import java.util.*;
 import static java.lang.Integer.parseInt;
 
 public class ClientHandler implements Runnable {
-    private final ServerDetails serverDetails;
-    Socket clientSocket;
+    private final Server serverDetails;
+    public Socket clientSocket;
     HashMap<String,RedisEntry> redisStore;
 
-    ClientHandler(Socket socket, HashMap<String,RedisEntry> store, ServerDetails serverDetails) {
+    ClientHandler(Socket socket, HashMap<String,RedisEntry> store, Server serverDetails) {
         this.clientSocket=socket;
         this.redisStore=store;
         this.serverDetails=serverDetails;
@@ -24,7 +27,6 @@ public class ClientHandler implements Runnable {
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
             BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
             String line="";
-
 
             while((line=bufferedReader.readLine()) !=null){
 //                *1\r\n$4\r\nping\r\n
@@ -43,6 +45,8 @@ public class ClientHandler implements Runnable {
 
 //
                 String actionVerb=cmdList.get(0);
+                System.out.println(actionVerb+" : action");
+                System.out.println(this.clientSocket+" :socket");
                 if(actionVerb.equalsIgnoreCase("ping")){
                     Printer.printPong(clientSocket);
                 }
