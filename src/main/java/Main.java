@@ -35,6 +35,8 @@ public class Main {
           }
       }
 
+      serverDetails.setSelfServerPort(port);
+
       if(Objects.isNull(serverDetails)){
           serverDetails=new MasterServer();
           serverDetails.setType("master");

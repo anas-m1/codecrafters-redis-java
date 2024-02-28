@@ -15,7 +15,7 @@ public class SlaveServer extends Server {
         System.out.println("handshake");
         Socket masterSocket=new Socket(masterHost, Integer.parseInt(masterPort,10));
         Printer.sendPing(masterSocket);
-        Printer.sendReplConfigToMaster(masterSocket, masterSocket.getLocalPort());
+        Printer.sendReplConfigToMaster(masterSocket, this.selfServerPort);
     }
 
     @Override
