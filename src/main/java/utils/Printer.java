@@ -3,10 +3,7 @@ package utils;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Printer {
     static String clrf="\r\n";
@@ -86,8 +83,8 @@ public class Printer {
         outputStream.flush();
     }
 
-    public static void respondToPsyncFromSlave(Socket clientSocket, String replid, int offset) throws IOException {
-        OutputStream outputStream=clientSocket.getOutputStream();
+    public static void respondToPsyncFromSlave(Socket slaveSocket, String replid, int offset) throws IOException {
+        OutputStream outputStream=slaveSocket.getOutputStream();
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
 //        outputStream.flush();
 
@@ -98,6 +95,12 @@ public class Printer {
         System.out.println(rdbBytes[0]+" :rdbbytesstr");
         outputStream.write(("$"+lenrdbBytesStr+clrf).getBytes());
         outputStream.write(rdbBytes);
+        outputStream.flush();
+    }
+
+    public static void sendCommand(Socket socket, String respMsg) throws IOException {
+        OutputStream outputStream=socket.getOutputStream();
+        outputStream.write(respMsg.getBytes());
         outputStream.flush();
     }
 }

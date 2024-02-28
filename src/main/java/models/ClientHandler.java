@@ -1,6 +1,7 @@
 package models;
 
 import utils.Printer;
+import utils.RedisParser;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -58,6 +59,15 @@ public class ClientHandler implements Runnable {
                     String key = cmdList.get(1);
                     String value = cmdList.get(2);
 
+
+                    if(serverDetails.getType().equalsIgnoreCase("master")){
+                        List<String> strList = cmdList.subList(0,2);
+                        Queue<String> setCommandQueue=new LinkedList<>();
+                        setCommandQueue.add(RedisParser.getRespStr(strList));
+
+                        ((MasterServer)serverDetails).setSetCommandQueue(setCommandQueue);
+                    }
+
                     System.out.println("key: " + key + " value: " + value);
                     RedisEntry entry = new RedisEntry(key, value);
 
@@ -91,7 +101,8 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 else if(actionVerb.equalsIgnoreCase("replconf")){
-                    Printer.respondToReplConfFromSlave(clientSocket);
+                    ((MasterServer)serverDetails).handleReplConfReqFromSlave(clientSocket);
+
                 }
                 else if(actionVerb.equalsIgnoreCase("PSYNC")){
                     ((MasterServer)serverDetails).respondToPsyncFromSlave(clientSocket);

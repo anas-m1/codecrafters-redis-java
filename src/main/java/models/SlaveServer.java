@@ -13,10 +13,10 @@ public class SlaveServer extends Server {
     public int masterPort;
     public void handshakeWithMaster() throws IOException {
         System.out.println("handshake");
-        Socket masterSocket=new Socket(masterHost, masterPort);
-        Printer.sendPing(masterSocket);
-        Printer.sendReplConfigToMaster(masterSocket, this.selfServerPort);
-        Printer.sendPsyncToServer(masterSocket);
+        Socket socketToMaster=new Socket(masterHost, masterPort);
+        Printer.sendPing(socketToMaster);
+        Printer.sendReplConfigToMaster(socketToMaster, this.selfServerPort);
+        Printer.sendPsyncToServer(socketToMaster);
     }
 
     @Override
