@@ -63,4 +63,10 @@ public class SlaveServer extends Server {
         this.offset+=(("*1\r\n$4\r\nping\r\n").getBytes().length);
         System.out.println(offset+"   :offset");
     }
+
+    public void handleSetCommandFromMaster(Socket clientSocket, List<String> cmdList) {
+        String reqRespStr=RedisParser.getRespStr(cmdList);
+        System.out.println(reqRespStr+"  :respstr");
+        this.offset+=((reqRespStr).getBytes().length);
+    }
 }

@@ -156,15 +156,17 @@ public class ClientHandler implements Runnable {
         }
         this.serverOfThis.getRedisStore().put(key, entry);
 
-        if(serverOfThis.getType().equalsIgnoreCase("master")){
+
+        if(socketType.equalsIgnoreCase("socketFromClient")){
             System.out.println("master is adding to queue all the available commands");
             List<String> strList = cmdList;
             ((MasterServer)serverOfThis).addToSetCommandQueue(RedisParser.getRespStr(strList));
             Printer.printOK(clientSocket);
         }else{
            //do nothing i.e , do not print if it current server is slave and set is coming from master socket
-            if(clientSocket==((SlaveServer)serverOfThis).getSocketToMaster()){
+            if(socketType.equalsIgnoreCase("socketToMaster")){
                 System.out.println("slave got set commands from store of master");
+                ((SlaveServer)serverOfThis).handleSetCommandFromMaster(clientSocket,cmdList);
             }
             else{
                 System.out.println("slave got set commands from clients");
