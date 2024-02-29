@@ -42,16 +42,18 @@ public class SlaveServer extends Server {
         List<String>responseCmdList=new ArrayList<>();
         responseCmdList.add("replconf");
         responseCmdList.add("ack") ;
+        System.out.println(offset+"   :offset");
         responseCmdList.add(String.valueOf(this.offset));
         String responseRespStr=RedisParser.getRespStr(responseCmdList);
 
         String reqRespStr=RedisParser.getRespStr(reqCmdList);
         this.offset+=reqRespStr.getBytes().length;
-        System.out.println(offset+"   :offset");
+//        System.out.println(offset+"   :offset");
         Printer.sendCommand(socketToMaster,responseRespStr);
     }
 
     public void handlePingFromMaster(Socket clientSocket) {
-        this.offset+="*1\r\n$4\r\nping\r\n".getBytes().length;
+        this.offset+=(("*1\r\n$4\r\nping\r\n").getBytes().length);
+        System.out.println(offset+"   :offset");
     }
 }
