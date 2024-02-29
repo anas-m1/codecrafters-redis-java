@@ -59,12 +59,6 @@ public class ClientHandler implements Runnable {
                     String key = cmdList.get(1);
                     String value = cmdList.get(2);
 
-
-                    if(serverDetails.getType().equalsIgnoreCase("master")){
-                        List<String> strList = cmdList.subList(0,3);
-                        ((MasterServer)serverDetails).addToSetCommandQueue(RedisParser.getRespStr(strList));
-                    }
-
                     System.out.println("key: " + key + " value: " + value);
                     RedisEntry entry = new RedisEntry(key, value) ;
 
@@ -77,7 +71,21 @@ public class ClientHandler implements Runnable {
                         }
                     }
                     redisStore.put(key, entry);
-                    Printer.printOK(clientSocket);
+
+                    if(serverDetails.getType().equalsIgnoreCase("master")){
+                        List<String> strList = cmdList.subList(0,3);
+                        ((MasterServer)serverDetails).addToSetCommandQueue(RedisParser.getRespStr(strList));
+                        Printer.printOK(clientSocket);
+                    }else{
+//                        do nothing i.e , do not print if it current server is slave and set is coming from master socket
+                        if(clientSocket==((SlaveServer)serverDetails).getSocketToMaster()){
+
+                        }
+                        else{
+                            Printer.printOK(clientSocket);
+                        }
+                    }
+
                 } else if (actionVerb.equalsIgnoreCase("get")) {
                     String key = cmdList.get(1);
                     System.out.println("key: " + key);

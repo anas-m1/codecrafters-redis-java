@@ -11,12 +11,13 @@ import java.util.HashMap;
 public class SlaveServer extends Server {
     public String masterHost;
     public int masterPort;
+    public Socket socketToMaster;
     public void handshakeWithMaster() throws IOException {
         System.out.println("handshake");
-        Socket socketToMaster=new Socket(masterHost, masterPort);
-        Printer.sendPing(socketToMaster);
-        Printer.sendReplConfigToMaster(socketToMaster, this.selfServerPort);
-        Printer.sendPsyncToServer(socketToMaster);
+        this.socketToMaster=new Socket(masterHost, masterPort);
+        Printer.sendPing(this.socketToMaster);
+        Printer.sendReplConfigToMaster(this.socketToMaster, this.selfServerPort);
+        Printer.sendPsyncToServer(this.socketToMaster);
     }
 
     @Override
