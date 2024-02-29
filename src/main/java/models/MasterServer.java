@@ -22,22 +22,24 @@ public class MasterServer extends Server{
         Printer.printInfo(clientSocket, infoMap);
     }
 
-    public void respondToPsyncFromSlave(Socket clientSocket) throws Exception {
+    public void respondToPsyncFromSlave(Socket slaveSocket) throws Exception {
+        this.slaveSockets.add(slaveSocket);
+        this.clientSockets.remove(slaveSocket);
         System.out.println("master responding to psync from slave"+slaveSockets.get(0));
-        Printer.respondToPsyncFromSlave(clientSocket,this.replid,this.offset);
+        Printer.respondToPsyncFromSlave(slaveSocket,this.replid,this.offset);
 //        if(setCommandQueue.isEmpty())return;
 
-        for(Socket slaveSocket : slaveSockets){
+        for(Socket ss : slaveSockets){
 //            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
 //            Printer.sendCommand(slaveSocket,"");
             for(String respSetcommand: setCommandQueue){
-                Printer.sendCommand(slaveSocket,respSetcommand);
+                Printer.sendCommand(ss,respSetcommand);
             }
         }
     }
 
     public void handleReplConfReqFromSlave(Socket slaveSocket) throws IOException {
-        this.slaveSockets.add(slaveSocket);
+//        this.slaveSockets.add(slaveSocket);
         Printer.respondToReplConfFromSlave(slaveSocket);
     }
 

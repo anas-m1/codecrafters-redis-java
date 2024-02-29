@@ -13,6 +13,7 @@ public class Printer {
         byte[] byteArr="+PONG\r\n".getBytes();
         outputStream.write(byteArr);
         outputStream.flush();
+        System.out.println("pong sent");
 //        outputStream.close();
     }
 

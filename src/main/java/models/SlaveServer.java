@@ -15,9 +15,7 @@ public class SlaveServer extends Server {
     public Socket socketToMaster;
     public void handshakeWithMaster() throws IOException {
         Printer.sendPing(this.socketToMaster);
-        System.out.println("ping sent");
         Printer.sendReplConfigToMaster(this.socketToMaster, this.selfServerPort);
-        System.out.println("replconfig sent");
         Printer.sendPsyncToServer(this.socketToMaster);
     }
 
@@ -28,15 +26,15 @@ public class SlaveServer extends Server {
         Printer.printInfo(clientSocket, infoMap);
     }
 
-    public void setExecutorService(ExecutorService executorService) throws IOException {
-        ClientHandler clientHandler=new ClientHandler(this.socketToMaster,this);
-        executorService.submit(clientHandler::run);
-    }
+//    public void setExecutorService(ExecutorService executorService) throws IOException {
+//        ClientHandler clientHandler=new ClientHandler(this.socketToMaster,this);
+//        executorService.submit(clientHandler::run);
+//    }
 
-    public SlaveServer(int selfServerPort) throws IOException {
+    public SlaveServer(int selfServerPort,String masterHost,int masterPort) throws IOException {
         super(selfServerPort);
         this.type="slave";
-        Socket socketToMaster=new Socket(this.masterHost, this.masterPort);
-        this.socketToMaster=socketToMaster;
+        this.masterHost=masterHost;
+        this.masterPort=masterPort;
     }
 }

@@ -41,16 +41,15 @@ public class Main {
           ((MasterServer) server).setOffset(0);
       }
       else{
-          server=new SlaveServer(port);
-          ((SlaveServer) server).setMasterHost(masterHost);
-          ((SlaveServer) server).setMasterPort(masterPort);
-          ((SlaveServer) server).setExecutorService(executorService);
+          server=new SlaveServer(port,masterHost,masterPort);
+//          ((SlaveServer) server).setMasterHost(masterHost);
+//          ((SlaveServer) server).setMasterPort(masterPort);
+//          ((SlaveServer) server).setExecutorService(executorService);
       }
 
 
     try {
         server.start(executorService);
-
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
     } catch (Exception e) {
