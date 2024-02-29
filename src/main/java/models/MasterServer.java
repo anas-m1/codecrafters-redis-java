@@ -35,7 +35,7 @@ public class MasterServer extends Server{
 //            Printer.sendCommand(slaveSocket,"");
             for(String respSetcommand: setCommandQueue){
                 Printer.sendCommand(ss,respSetcommand);
-                this.getAck(slaveSocket);
+//                this.getAck(slaveSocket);
             }
         }
 
