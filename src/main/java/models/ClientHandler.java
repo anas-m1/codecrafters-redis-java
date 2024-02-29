@@ -85,12 +85,15 @@ public class ClientHandler implements Runnable {
                         if(cmdList.get(1).equalsIgnoreCase("ack")) {
 
                         }
-                        else
-                            ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
+                        // for initial replconf (in handshake )
+                        else ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
                     }
                 }
                 else if(actionVerb.equalsIgnoreCase("PSYNC")){
                     ((MasterServer)serverOfThis).respondToPsyncFromSlave(clientSocket);
+                }
+                else if(actionVerb.equalsIgnoreCase("wait")){
+                    ((MasterServer)serverOfThis).respondToWaitFromClient(clientSocket,cmdList);
                 }
 
                 for (int i = 0; i < cmdList.size(); i++) {
@@ -168,10 +171,10 @@ public class ClientHandler implements Runnable {
                 System.out.println("slave got set commands from store of master");
                 ((SlaveServer)serverOfThis).handleSetCommandFromMaster(clientSocket,cmdList);
             }
-            else{
-                System.out.println("slave got set commands from clients");
-                Printer.printOK(clientSocket);
-            }
+//            else{
+//                System.out.println("slave got set commands from clients");
+//                Printer.printOK(clientSocket);
+//            }
         }
     }
 }

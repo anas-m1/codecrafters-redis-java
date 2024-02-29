@@ -67,4 +67,8 @@ public class MasterServer extends Server{
             Printer.sendCommand(slaveSocket,respStr);
         }
     }
+
+    public void respondToWaitFromClient(Socket clientSocket,List<String> cmdList) throws IOException{
+        Printer.sendCommand(clientSocket,"0");
+    }
 }
