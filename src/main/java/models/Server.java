@@ -13,7 +13,8 @@ public abstract class Server {
     HashMap<String, RedisEntry> redisStore;
     public abstract void sendReplicationDetailsToClient(Socket clientSocket) throws Exception;
 
-    Server(){
+    Server(int selfServerPort){
+        this.selfServerPort =selfServerPort;
         this.redisStore = new HashMap<>();
     }
 }

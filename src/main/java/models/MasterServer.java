@@ -41,15 +41,17 @@ public class MasterServer extends Server{
         Printer.respondToReplConfFromSlave(slaveSocket);
     }
 
-    public MasterServer(){
+    public MasterServer(int selfServerPort){
+        super(selfServerPort);
+        this.type="master";
         this.slaveSockets=new ArrayList<>();
         this.setCommandQueue=new LinkedList<>();
     }
 
     public void addToSetCommandQueue(String respStr) throws IOException {
         this.setCommandQueue.add(respStr);
-//        for(Socket slaveSocket : slaveSockets){
-//            Printer.sendCommand(slaveSocket,respStr);
-//        }
+        for(Socket slaveSocket : slaveSockets){
+            Printer.sendCommand(slaveSocket,respStr);
+        }
     }
 }

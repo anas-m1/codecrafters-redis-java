@@ -32,4 +32,11 @@ public class SlaveServer extends Server {
         ClientHandler clientHandler=new ClientHandler(this.socketToMaster,this);
         executorService.submit(clientHandler::run);
     }
+
+    public SlaveServer(int selfServerPort) throws IOException {
+        super(selfServerPort);
+        this.type="slave";
+        Socket socketToMaster=new Socket(this.masterHost, this.masterPort);
+        this.socketToMaster=socketToMaster;
+    }
 }

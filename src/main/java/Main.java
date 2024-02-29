@@ -18,7 +18,7 @@ public class Main {
       Socket clientSocket = null;
 
       int port = 6379;
-      Server serverDetails=null;
+      Server server=null;
       String serverType="master";
       String masterHost="localhost";
       int masterPort=port;
@@ -36,37 +36,31 @@ public class Main {
       }
 
       if(serverType=="master"){
-          serverDetails=new MasterServer();
-          serverDetails.setType("master");
-          ((MasterServer) serverDetails).setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
-          ((MasterServer) serverDetails).setOffset(0);
+          server=new MasterServer(port);
+          ((MasterServer) server).setReplid("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
+          ((MasterServer) server).setOffset(0);
       }
       else{
-          serverDetails=new SlaveServer();
-          serverDetails.setType("slave");
-          ((SlaveServer) serverDetails).setMasterHost(masterHost);
-          ((SlaveServer) serverDetails).setMasterPort(masterPort);
-          Socket socketToMaster=new Socket(masterHost, masterPort);
-          ((SlaveServer) serverDetails).setSocketToMaster(socketToMaster);
-          ((SlaveServer) serverDetails).setExecutorService(executorService);
+          server=new SlaveServer(port);
+          ((SlaveServer) server).setMasterHost(masterHost);
+          ((SlaveServer) server).setMasterPort(masterPort);
+          ((SlaveServer) server).setExecutorService(executorService);
       }
-
-      serverDetails.setSelfServerPort(port);
 
 
     try {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
 
-        if(serverDetails.getType().equalsIgnoreCase("slave")){
-            ((SlaveServer) serverDetails).handshakeWithMaster();
+        if(server.getType().equalsIgnoreCase("slave")){
+            ((SlaveServer) server).handshakeWithMaster();
         }
 
         // Wait for connection from client.
         while(true){
             clientSocket = serverSocket.accept();
             System.out.println("new client connection");
-            ClientHandler clientHandler=new ClientHandler(clientSocket,serverDetails);
+            ClientHandler clientHandler=new ClientHandler(clientSocket,server);
             executorService.submit(clientHandler::run);
         }
 
