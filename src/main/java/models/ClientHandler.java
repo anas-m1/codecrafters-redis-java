@@ -35,7 +35,7 @@ public class ClientHandler implements Runnable {
                 List<String> cmdList = new ArrayList<>();
 
                 if(line.startsWith("+FULLRESYNC")){
-                    handleFullResync(bufferedReader,cmdList);
+                    handleFullResync(bufferedReader, cmdList);
                 }
 
                 if (line.charAt(0) == '*') {
@@ -93,7 +93,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void handleFullResync(BufferedReader bufferedReader,ArrayList<String> cmdList) throws IOException {
+    private void handleFullResync(BufferedReader bufferedReader,List<String> cmdList) throws IOException {
         String rdbFile=bufferedReader.readLine();
         byte[] rdbFileBytes=rdbFile.getBytes();
         int i;

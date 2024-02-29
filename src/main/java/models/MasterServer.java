@@ -29,7 +29,7 @@ public class MasterServer extends Server{
 
         for(Socket slaveSocket : slaveSockets){
 //            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
-            Printer.sendCommand(slaveSocket,"");
+//            Printer.sendCommand(slaveSocket,"");
             for(String respSetcommand: setCommandQueue){
                 Printer.sendCommand(slaveSocket,respSetcommand);
             }
