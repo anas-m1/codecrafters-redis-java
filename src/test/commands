@@ -1,0 +1,18 @@
+./spawn_redis_server.sh
+./spawn_redis_server.sh --port 6380 --replicaof 127.0.0.1 6379
+netcat 127.0.0.1 6379
+netcat 127.0.0.1 6380
+*3
+$3
+set
+$3
+foo
+$3
+bar
+
+*2
+$3
+get
+$3
+foo
+

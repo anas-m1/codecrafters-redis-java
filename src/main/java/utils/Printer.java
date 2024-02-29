@@ -49,7 +49,6 @@ public class Printer {
         Integer zlen=keyValStrBuilder.toString().length();
         infoStr="$"+zlen.toString()+clrf+keyValStrBuilder+clrf;
 
-        System.out.println(infoStr+":infostr");
         OutputStream outputStream=clientSocket.getOutputStream();
         byte[] byteArr=infoStr.getBytes();
         outputStream.write(byteArr);
@@ -72,6 +71,7 @@ public class Printer {
     }
 
     public static void sendPsyncToServer(Socket masterSocket) throws IOException {
+        System.out.println("sent psync to master");
         OutputStream outputStream= masterSocket.getOutputStream();
         outputStream.write(("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n").getBytes());
         outputStream.flush();
@@ -90,17 +90,17 @@ public class Printer {
 
         String base64str="UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
-        int lenrdbBytesStr=rdbBytes.length;
+        int lenrdbBytesStr=rdbBytes.length *2;
 
-        System.out.println(rdbBytes[0]+" :rdbbytesstr");
         outputStream.write(("$"+lenrdbBytesStr+clrf).getBytes());
         outputStream.write(rdbBytes);
         outputStream.flush();
     }
 
     public static void sendCommand(Socket socket, String respMsg) throws IOException {
+        System.out.println("sending command to client socket"+socket.getRemoteSocketAddress());
+        System.out.println("sending command to client socket:  "+respMsg);
         OutputStream outputStream=socket.getOutputStream();
-        System.out.println("resp msg: " + respMsg);
         outputStream.write(respMsg.getBytes());
         outputStream.flush();
     }

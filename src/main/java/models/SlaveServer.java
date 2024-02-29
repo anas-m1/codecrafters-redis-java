@@ -6,6 +6,7 @@ import utils.Printer;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
 
 @Data
 public class SlaveServer extends Server {
@@ -13,10 +14,10 @@ public class SlaveServer extends Server {
     public int masterPort;
     public Socket socketToMaster;
     public void handshakeWithMaster() throws IOException {
-        System.out.println("handshake");
-        this.socketToMaster=new Socket(masterHost, masterPort);
         Printer.sendPing(this.socketToMaster);
+        System.out.println("ping sent");
         Printer.sendReplConfigToMaster(this.socketToMaster, this.selfServerPort);
+        System.out.println("replconfig sent");
         Printer.sendPsyncToServer(this.socketToMaster);
     }
 
@@ -25,5 +26,11 @@ public class SlaveServer extends Server {
         HashMap<String,String> infoMap = new HashMap<>();
         infoMap.put("role", "slave");
         Printer.printInfo(clientSocket, infoMap);
+    }
+
+    public void setExecutorService(ExecutorService executorService) throws IOException {
+        this.socketToMaster=new Socket(masterHost, masterPort);
+        ClientHandler clientHandler=new ClientHandler(this.socketToMaster,this);
+        executorService.submit(clientHandler::run);
     }
 }

@@ -4,6 +4,7 @@ import utils.Printer;
 import utils.RedisParser;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
@@ -14,15 +15,12 @@ import static java.lang.Integer.parseInt;
 public class ClientHandler implements Runnable {
     private final Server serverDetails;
     public Socket clientSocket;
-    HashMap<String, RedisEntry> redisStore;
 
-    public ClientHandler(Socket socket, HashMap<String, RedisEntry> store, Server serverDetails) {
+
+    public ClientHandler(Socket socket, Server serverDetails) {
         this.clientSocket = socket;
-        this.redisStore = store;
         this.serverDetails = serverDetails;
     }
-
-    ;
 
     public void run() {
 
@@ -33,77 +31,35 @@ public class ClientHandler implements Runnable {
             String line = "";
 
             while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line+"     :line");
                 List<String> cmdList = new ArrayList<>();
-                System.out.println(line + ": line");
                 if (line.charAt(0) == '*') {
                     int numWords = parseInt(line.substring(1));
                     for (int i = 0; i < numWords; i++) {
                         String wordLenLine = bufferedReader.readLine();
                         int WordLength = parseInt(wordLenLine.substring(1));
                         String word = bufferedReader.readLine();
-                        System.out.println(word + " :word");
                         cmdList.add(word);
                     }
                 }
 
+                if(cmdList.size() <= 0) {
+                    System.out.println("zero length in cmdlist");
+                    continue;
+                }
 
                 String actionVerb = cmdList.get(0);
-                System.out.println(actionVerb + " : action");
-                System.out.println(this.clientSocket + " :socket");
+                System.out.println("received command:  "+cmdList.get(0));
                 if (actionVerb.equalsIgnoreCase("ping")) {
                     Printer.printPong(clientSocket);
                 } else if (actionVerb.equalsIgnoreCase("echo")) {
                     String arg = cmdList.get(1);
                     Printer.printEcho(clientSocket, arg);
                 } else if (actionVerb.equalsIgnoreCase("set")) {
-                    String key = cmdList.get(1);
-                    String value = cmdList.get(2);
-
-                    System.out.println("key: " + key + " value: " + value);
-                    RedisEntry entry = new RedisEntry(key, value) ;
-
-                    if (cmdList.size() > 3) {
-                        if (cmdList.get(3).equalsIgnoreCase("px")) {
-                            long timeToLive = Long.parseLong(cmdList.get(4));
-                            System.out.println("key: " + key + " value: " + value + " timeToLive: " + timeToLive);
-                            long currUNIXts = System.currentTimeMillis();
-                            entry.setExpiryAt(currUNIXts + timeToLive);
-                        }
-                    }
-                    redisStore.put(key, entry);
-
-                    if(serverDetails.getType().equalsIgnoreCase("master")){
-                        List<String> strList = cmdList.subList(0,3);
-                        ((MasterServer)serverDetails).addToSetCommandQueue(RedisParser.getRespStr(strList));
-                        Printer.printOK(clientSocket);
-                    }else{
-//                        do nothing i.e , do not print if it current server is slave and set is coming from master socket
-                        if(clientSocket==((SlaveServer)serverDetails).getSocketToMaster()){
-
-                        }
-                        else{
-                            Printer.printOK(clientSocket);
-                        }
-                    }
-
+                    System.out.println("received setcommand:  "+cmdList.get(1));
+                    handlSetCommand(cmdList);
                 } else if (actionVerb.equalsIgnoreCase("get")) {
-                    String key = cmdList.get(1);
-                    System.out.println("key: " + key);
-                    if (redisStore.containsKey(key)) {
-                        RedisEntry entry = redisStore.get(key);
-                        System.out.println(entry);
-                        System.out.println("hello " + entry.getExpiryAt() + " seconds " + System.currentTimeMillis());
-
-                        if (entry.getExpiryAt() > System.currentTimeMillis()) {
-                            System.out.println(entry.getExpiryAt() + " seconds " + System.currentTimeMillis());
-                            Printer.printEcho(clientSocket, entry.getValue());
-                        } else {
-                            redisStore.remove(key);
-                            Printer.printNullBulk(clientSocket);
-                        }
-                    } else {
-                        Printer.printNullBulk(clientSocket);
-                    }
+                    handlGetCommand(cmdList);
                 }
                 else if(actionVerb.equalsIgnoreCase("replconf")){
                     ((MasterServer)serverDetails).handleReplConfReqFromSlave(clientSocket);
@@ -115,7 +71,6 @@ public class ClientHandler implements Runnable {
                 }
 
                 for (int i = 0; i < cmdList.size(); i++) {
-                    System.out.println(cmdList.get(i));
                     if (cmdList.get(i).equalsIgnoreCase("info")) {
                         if (cmdList.get(i + 1).equalsIgnoreCase("replication")) {
                             serverDetails.sendReplicationDetailsToClient(this.clientSocket);
@@ -131,6 +86,55 @@ public class ClientHandler implements Runnable {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    private void handlGetCommand(List<String> cmdList) throws Exception {
+        String key = cmdList.get(1);
+        HashMap<String,RedisEntry> redisStore=this.serverDetails.getRedisStore();
+        if ( redisStore.containsKey(key)) {
+            RedisEntry entry = redisStore.get(key);
+
+            if (entry.getExpiryAt() > System.currentTimeMillis()) {
+                Printer.printEcho(clientSocket, entry.getValue());
+            } else {
+                redisStore.remove(key);
+                Printer.printNullBulk(clientSocket);
+            }
+        } else {
+            Printer.printNullBulk(clientSocket);
+        }
+    }
+
+    private void handlSetCommand(List<String> cmdList) throws Exception {
+        String key = cmdList.get(1);
+        String value = cmdList.get(2);
+
+        RedisEntry entry = new RedisEntry(key, value) ;
+
+        if (cmdList.size() > 3) {
+            if (cmdList.get(3).equalsIgnoreCase("px")) {
+                long timeToLive = Long.parseLong(cmdList.get(4));
+                long currUNIXts = System.currentTimeMillis();
+                entry.setExpiryAt(currUNIXts + timeToLive);
+            }
+        }
+        this.serverDetails.getRedisStore().put(key, entry);
+
+        if(serverDetails.getType().equalsIgnoreCase("master")){
+            System.out.println("master is adding to queue all the available commands");
+            List<String> strList = cmdList.subList(0,3);
+            ((MasterServer)serverDetails).addToSetCommandQueue(RedisParser.getRespStr(strList));
+            Printer.printOK(clientSocket);
+        }else{
+           //do nothing i.e , do not print if it current server is slave and set is coming from master socket
+            if(clientSocket==((SlaveServer)serverDetails).getSocketToMaster()){
+                System.out.println("slave got set commands from store of master");
+            }
+            else{
+                System.out.println("slave got set commands from clients");
+                Printer.printOK(clientSocket);
+            }
+        }
     }
 }
 
