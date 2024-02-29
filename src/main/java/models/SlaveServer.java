@@ -46,7 +46,7 @@ public class SlaveServer extends Server {
         responseCmdList.add(String.valueOf(this.offset));
         System.out.println(String.valueOf(this.offset)+" :offsetString");
         String responseRespStr=RedisParser.getRespStr(responseCmdList);
-        System.out.println(responseRespStr+"   :resprespstr");
+        System.out.println(responseRespStr+"  :resprespstr");
 
         String reqRespStr=RedisParser.getRespStr(reqCmdList);
         this.offset+=reqRespStr.length();
