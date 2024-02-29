@@ -30,6 +30,17 @@ public class ClientHandler implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = "";
 
+//            int bytesToRead=0;
+//            while(inputStream.available() != -1) {
+//                System.out.println(inputStream.read() + "::bytes");
+//                int byteValue = inputStream.read();
+//                char ch = (char)byteValue;
+//                if(ch=='*'){
+//                    int byteValue = inputStream.read();
+//                    char ch = (char)byteValue;
+//                }
+//            }
+
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line+"     :line");
                 List<String> cmdList = new ArrayList<>();
@@ -68,7 +79,6 @@ public class ClientHandler implements Runnable {
                 }
                 else if(actionVerb.equalsIgnoreCase("replconf")){
                     ((MasterServer)serverDetails).handleReplConfReqFromSlave(clientSocket);
-
                 }
                 else if(actionVerb.equalsIgnoreCase("PSYNC")){
                     ((MasterServer)serverDetails).respondToPsyncFromSlave(clientSocket);
