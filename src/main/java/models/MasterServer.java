@@ -25,7 +25,9 @@ public class MasterServer extends Server{
     public void respondToPsyncFromSlave(Socket clientSocket) throws Exception {
         System.out.println("master responding to psync from slave"+slaveSockets.get(0));
         Printer.respondToPsyncFromSlave(clientSocket,this.replid,this.offset);
+
         for(Socket slaveSocket : slaveSockets){
+            Printer.sendCommand(slaveSocket,"");
             for(String respSetcommand: setCommandQueue){
                 Printer.sendCommand(slaveSocket,respSetcommand);
             }
