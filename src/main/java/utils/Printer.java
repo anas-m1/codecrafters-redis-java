@@ -94,7 +94,7 @@ public class Printer {
 
         outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf).getBytes());
         outputStream.write(rdbBytes);
-        outputStream.flush();
+//        outputStream.flush();
     }
 
     public static void sendCommand(Socket socket, String respMsg) throws IOException {
