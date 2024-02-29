@@ -33,6 +33,11 @@ public class ClientHandler implements Runnable {
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line+"     :line");
                 List<String> cmdList = new ArrayList<>();
+
+                if(line.startsWith("+FULLRESYNC")){
+                    handleFullResync(bufferedReader,cmdList);
+                }
+
                 if (line.charAt(0) == '*') {
                     int numWords = parseInt(line.substring(1));
                     for (int i = 0; i < numWords; i++) {
@@ -86,6 +91,29 @@ public class ClientHandler implements Runnable {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    private void handleFullResync(BufferedReader bufferedReader,ArrayList<String> cmdList) throws IOException {
+        String rdbFile=bufferedReader.readLine();
+        byte[] rdbFileBytes=rdbFile.getBytes();
+        int i;
+        for(i = 0; i < rdbFileBytes.length; i++) {
+            if(rdbFileBytes[i]==(byte)0xff){
+                i+=8;
+                break;
+            }
+        }
+        if (rdbFileBytes[i] == '*') {
+            String line=bufferedReader.readLine();
+            int numWords = parseInt(line.substring(1));
+            for (int j = 0; j < numWords; j++) {
+                String wordLenLine = bufferedReader.readLine();
+                int WordLength = parseInt(wordLenLine.substring(1));
+                String word = bufferedReader.readLine();
+                cmdList.add(word);
+            }
+        }
+        System.out.println(cmdList.get(0));
     }
 
     private void handlGetCommand(List<String> cmdList) throws Exception {
