@@ -86,7 +86,7 @@ public class Printer {
     public static void respondToPsyncFromSlave(Socket slaveSocket, String replid, int offset) throws IOException {
         OutputStream outputStream=slaveSocket.getOutputStream();
         outputStream.write(("+FULLRESYNC "+replid+" "+offset+"\r\n").getBytes());
-//        outputStream.flush();
+        outputStream.flush();
 
         String base64str="UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
@@ -94,7 +94,7 @@ public class Printer {
 
         outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf).getBytes());
         outputStream.write(rdbBytes);
-//        outputStream.flush();
+        outputStream.flush();
     }
 
     public static void sendCommand(Socket socket, String respMsg) throws IOException {
