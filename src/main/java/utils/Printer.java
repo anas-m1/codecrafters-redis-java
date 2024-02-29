@@ -94,6 +94,7 @@ public class Printer {
 
         outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf).getBytes());
         outputStream.write(rdbBytes);
+        outputStream.write(clrf.getBytes());
         outputStream.flush();
     }
 

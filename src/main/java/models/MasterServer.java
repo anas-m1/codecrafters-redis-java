@@ -27,13 +27,13 @@ public class MasterServer extends Server{
         Printer.respondToPsyncFromSlave(clientSocket,this.replid,this.offset);
 //        if(setCommandQueue.isEmpty())return;
 
-//        for(Socket slaveSocket : slaveSockets){
-////            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
-////            Printer.sendCommand(slaveSocket,"");
-//            for(String respSetcommand: setCommandQueue){
-//                Printer.sendCommand(slaveSocket,respSetcommand);
-//            }
-//        }
+        for(Socket slaveSocket : slaveSockets){
+//            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
+//            Printer.sendCommand(slaveSocket,"");
+            for(String respSetcommand: setCommandQueue){
+                Printer.sendCommand(slaveSocket,respSetcommand);
+            }
+        }
     }
 
     public void handleReplConfReqFromSlave(Socket slaveSocket) throws IOException {
