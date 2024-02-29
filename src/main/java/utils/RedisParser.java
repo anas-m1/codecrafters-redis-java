@@ -16,4 +16,16 @@ public class RedisParser {
         result+=(buffer.toString()+clrf);
         return result;
     }
+
+    public static int getRedisBytes(String reqRespStr) {
+//        each char is considered a byte, and "\r\n" is 2 bytes
+        int numBytes=0;
+        for(int i=0; i<reqRespStr.length(); i++){
+            if(i+3<reqRespStr.length() && reqRespStr.substring(i,i+4)=="\r\n"){
+                i+=3;
+            }
+            numBytes++;
+        }
+        return numBytes;
+    }
 }
