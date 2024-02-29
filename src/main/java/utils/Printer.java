@@ -92,8 +92,8 @@ public class Printer {
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
         Integer lenrdbBytesStr=rdbBytes.length;
 
-        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf+rdbBytes.toString()).getBytes());
-//        outputStream.write(rdbBytes);
+        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf).getBytes());
+        outputStream.write(rdbBytes);
         outputStream.flush();
     }
 
