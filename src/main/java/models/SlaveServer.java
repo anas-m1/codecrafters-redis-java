@@ -54,6 +54,6 @@ public class SlaveServer extends Server {
 
     public void handlePingFromMaster(Socket clientSocket) {
         this.offset+=(("*1\r\n$4\r\nping\r\n").getBytes().length);
-        System.out.println(offset+"   :offset");
+        System.out.println(offset+"   :offset") ;
     }
 }
