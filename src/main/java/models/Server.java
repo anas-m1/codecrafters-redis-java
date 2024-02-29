@@ -40,6 +40,7 @@ public abstract class Server {
             ((SlaveServer) this).handshakeWithMaster();
         }
 
+
         // Wait for connection from client.
         while(true){
             Socket clientSocket = serverSocket.accept();
