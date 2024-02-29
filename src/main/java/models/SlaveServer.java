@@ -6,9 +6,7 @@ import utils.RedisParser;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Data
 public class SlaveServer extends Server {
@@ -16,6 +14,7 @@ public class SlaveServer extends Server {
     public int masterPort;
     public Socket socketToMaster;
     public int offset;
+//    Queue<String> setCommandQueue;
     public void handshakeWithMaster() throws IOException {
         Printer.sendPing(this.socketToMaster);
         Printer.sendReplConfigToMaster(this.socketToMaster, this.selfServerPort);
@@ -35,9 +34,10 @@ public class SlaveServer extends Server {
         this.masterHost=masterHost;
         this.masterPort=masterPort;
         this.offset=0;
+//        this.setCommandQueue=new LinkedList<>();
     }
 
-    public void handleReplConfAckFromMaster(Socket socketToMaster, List<String> reqCmdList) throws IOException {
+    public void handleReplConfGetAckFromMaster(Socket socketToMaster, List<String> reqCmdList) throws IOException {
 //        REPLCONF ACK 0
         List<String>responseCmdList=new ArrayList<>();
         responseCmdList.add("replconf");
@@ -65,6 +65,7 @@ public class SlaveServer extends Server {
     }
 
     public void handleSetCommandFromMaster(Socket clientSocket, List<String> cmdList) {
+//        this.setCommandQueue.add(RedisParser.getRespStr(cmdList));
         String reqRespStr=RedisParser.getRespStr(cmdList);
         System.out.println(reqRespStr+"  :respstr");
         this.offset+=((reqRespStr).getBytes().length);

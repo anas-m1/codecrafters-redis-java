@@ -78,12 +78,12 @@ public class ClientHandler implements Runnable {
                     //REPLCONF GETACK *
                     if(cmdList.get(1).equalsIgnoreCase("getack")) {
                         if(cmdList.get(2).equalsIgnoreCase("*")){
-                            ((SlaveServer)serverOfThis).handleReplConfAckFromMaster(clientSocket,cmdList);
+                            ((SlaveServer)serverOfThis).handleReplConfGetAckFromMaster(clientSocket,cmdList);
                         }
                     }
                     else{
                         if(cmdList.get(1).equalsIgnoreCase("ack")) {
-
+                            ((MasterServer)serverOfThis).handleReplConfAckResponseFromSlave(clientSocket,cmdList);
                         }
                         // for initial replconf (in handshake )
                         else ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);

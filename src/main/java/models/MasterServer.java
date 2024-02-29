@@ -70,6 +70,13 @@ public class MasterServer extends Server{
     }
 
     public void respondToWaitFromClient(Socket clientSocket,List<String> cmdList) throws IOException{
-        Printer.sendCommand(clientSocket,":"+String.valueOf(this.slaveSockets.size())+"\r\n");
+            //        Printer.sendCommand(clientSocket,":"+String.valueOf(this.slaveSockets.size())+"\r\n");
+        //getacks of all sockets and store them in Hashmap<Socket,Ack(integer)>
+        //
+
+
+    }
+
+    public void handleReplConfAckResponseFromSlave(Socket clientSocket, List<String> cmdList) {
     }
 }
