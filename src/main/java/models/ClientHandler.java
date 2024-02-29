@@ -59,7 +59,6 @@ public class ClientHandler implements Runnable {
                 System.out.println("received command: "+cmdList.get(0));
                 if (actionVerb.equalsIgnoreCase("ping")) {
                     System.out.println("ping received");
-
                     if(socketType.equalsIgnoreCase("socketToMaster")){
                         ((SlaveServer)serverOfThis).handlePingFromMaster(clientSocket);
                     }
