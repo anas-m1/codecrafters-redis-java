@@ -106,8 +106,10 @@ public class ClientHandler implements Runnable {
     private void handlGetCommand(List<String> cmdList) throws Exception {
         String key = cmdList.get(1);
         HashMap<String,RedisEntry> redisStore=this.serverOfThis.getRedisStore();
+        System.out.println(key+"  :key");
         if ( redisStore.containsKey(key)) {
             RedisEntry entry = redisStore.get(key);
+            System.out.println(key+"  :key1");
 
             if (entry.getExpiryAt() > System.currentTimeMillis()) {
                 Printer.printEcho(clientSocket, entry.getValue());

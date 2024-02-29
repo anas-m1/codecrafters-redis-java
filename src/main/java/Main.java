@@ -42,9 +42,6 @@ public class Main {
       }
       else{
           server=new SlaveServer(port,masterHost,masterPort);
-//          ((SlaveServer) server).setMasterHost(masterHost);
-//          ((SlaveServer) server).setMasterPort(masterPort);
-//          ((SlaveServer) server).setExecutorService(executorService);
       }
 
 
