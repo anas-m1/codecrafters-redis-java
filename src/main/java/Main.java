@@ -49,20 +49,7 @@ public class Main {
 
 
     try {
-        serverSocket = new ServerSocket(port);
-        serverSocket.setReuseAddress(true);
-
-        if(server.getType().equalsIgnoreCase("slave")){
-            ((SlaveServer) server).handshakeWithMaster();
-        }
-
-        // Wait for connection from client.
-        while(true){
-            clientSocket = serverSocket.accept();
-            System.out.println("new client connection");
-            ClientHandler clientHandler=new ClientHandler(clientSocket,server);
-            executorService.submit(clientHandler::run);
-        }
+        server.start(executorService);
 
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
