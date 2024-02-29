@@ -1,5 +1,7 @@
 package models;
 import lombok.Data;
+import utils.Printer;
+import utils.RedisParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,7 +17,8 @@ public abstract class Server {
     public int selfServerPort;
     HashMap<String, RedisEntry> redisStore;
     public List<Socket> clientSockets;
-
+    String dir="";
+    String dbfilename="";
     public abstract void sendReplicationDetailsToClient(Socket clientSocket) throws Exception;
 
     Server(int selfServerPort){
@@ -49,5 +52,19 @@ public abstract class Server {
             ClientHandler clientHandler=new ClientHandler(clientSocket,(Server)this,"socketFromClient");
             executorService.submit(clientHandler::run);
         }
+    }
+
+    public void handleGetConfigDir(Socket clientSocket) throws IOException {
+        List<String> respArr=new ArrayList<>();
+        respArr.add("dir");
+        respArr.add(this.dir);
+        Printer.sendCommand(clientSocket, RedisParser.getRespStr(respArr));
+    }
+
+    public void handleGetConfigDbFilename(Socket clientSocket) throws IOException {
+        List<String> respArr=new ArrayList<>();
+        respArr.add("dbfilename");
+        respArr.add(this.dbfilename);
+        Printer.sendCommand(clientSocket, RedisParser.getRespStr(respArr));
     }
 }

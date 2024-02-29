@@ -95,6 +95,19 @@ public class ClientHandler implements Runnable {
                 else if(actionVerb.equalsIgnoreCase("wait")){
                     ((MasterServer)serverOfThis).respondToWaitFromClient(clientSocket,cmdList);
                 }
+                else if(actionVerb.equalsIgnoreCase("config")){
+//                    redis-cli CONFIG GET dir
+//                    redis-cli CONFIG GET dbfilename
+                    if(cmdList.get(1).equalsIgnoreCase("get")){
+                        if(cmdList.get(2).equalsIgnoreCase("dir")){
+                            serverOfThis.handleGetConfigDir(clientSocket);
+                        }
+                        else if(cmdList.get(2).equalsIgnoreCase("dbfilename")){
+                            serverOfThis.handleGetConfigDbFilename(clientSocket);
+                        }
+                    }
+                }
+
 
                 for (int i = 0; i < cmdList.size(); i++) {
                     if (cmdList.get(i).equalsIgnoreCase("info")) {

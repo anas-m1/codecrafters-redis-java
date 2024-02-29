@@ -4,8 +4,6 @@ import utils.Printer;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,6 +20,8 @@ public class Main {
       String serverType="master";
       String masterHost="localhost";
       int masterPort=port;
+      String dir="";
+      String dbfilename="";
 
       for(int i=0;i<args.length;i++){
           String x=args[i];
@@ -33,6 +33,12 @@ public class Main {
               masterHost=args[i+1];
               masterPort=Integer.parseInt(args[i+2]);
           }
+          else if(x.equalsIgnoreCase("--dir")){
+              dir=args[i+1];
+          }
+          else if(x.equalsIgnoreCase("--dbfilename")){
+              dbfilename=args[i+1];
+          }
       }
 
       if(serverType=="master"){
@@ -43,6 +49,10 @@ public class Main {
       else{
           server=new SlaveServer(port,masterHost,masterPort);
       }
+      if(dir!="")
+        server.setDir(dir);
+      if(dbfilename!="")
+        server.setDbfilename(dbfilename);
 
 
     try {
