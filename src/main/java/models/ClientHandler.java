@@ -158,7 +158,7 @@ public class ClientHandler implements Runnable {
 
 
         if(socketType.equalsIgnoreCase("socketFromClient")){
-            System.out.println("master is adding to queue all the available commands");
+            System.out.println("master  is adding to queue all the available commands");
             List<String> strList = cmdList;
             ((MasterServer)serverOfThis).addToSetCommandQueue(RedisParser.getRespStr(strList));
             Printer.printOK(clientSocket);
