@@ -14,12 +14,14 @@ import static java.lang.Integer.parseInt;
 
 public class ClientHandler implements Runnable {
     private final Server serverOfThis;
+    private final String socketType;
     public Socket clientSocket;
 
 
-    public ClientHandler(Socket socket, Server serverOfThis) {
+    public ClientHandler(Socket socket, Server serverOfThis,String socketType) {
         this.clientSocket = socket;
         this.serverOfThis = serverOfThis;
+        this.socketType=socketType;
     }
 
     public void run() {
@@ -58,6 +60,9 @@ public class ClientHandler implements Runnable {
                 if (actionVerb.equalsIgnoreCase("ping")) {
                     System.out.println("ping received");
                     Printer.printPong(clientSocket);
+                    if(socketType.equalsIgnoreCase("socketToMaster")){
+                        ((SlaveServer)serverOfThis).handlePingFromMaster(clientSocket);
+                    }
                 } else if (actionVerb.equalsIgnoreCase("echo")) {
                     String arg = cmdList.get(1);
                     Printer.printEcho(clientSocket, arg);
@@ -71,7 +76,7 @@ public class ClientHandler implements Runnable {
                     //REPLCONF GETACK *
                     if(cmdList.get(1).equalsIgnoreCase("getack")) {
                         if(cmdList.get(2).equalsIgnoreCase("*")){
-                            ((SlaveServer)serverOfThis).handleReplConfAckFromMaster(clientSocket);
+                            ((SlaveServer)serverOfThis).handleReplConfAckFromMaster(clientSocket,cmdList);
                         }
                     }
                     else{

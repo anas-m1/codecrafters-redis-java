@@ -35,7 +35,7 @@ public abstract class Server {
             System.out.println("here:  " + ((SlaveServer)this).masterHost+ ((SlaveServer)this).masterPort);
             Socket socketToMaster=new Socket(((SlaveServer)this).masterHost, ((SlaveServer)this).masterPort);
             ((SlaveServer)this).socketToMaster=socketToMaster;
-            ClientHandler clientHandler=new ClientHandler(socketToMaster,this);
+            ClientHandler clientHandler=new ClientHandler(socketToMaster,this,"socketToMaster");
             executorService.submit(clientHandler::run);
             ((SlaveServer) this).handshakeWithMaster();
         }
@@ -45,7 +45,7 @@ public abstract class Server {
             Socket clientSocket = serverSocket.accept();
             this.clientSockets.add(clientSocket);
             System.out.println("new client connection");
-            ClientHandler clientHandler=new ClientHandler(clientSocket,(Server)this);
+            ClientHandler clientHandler=new ClientHandler(clientSocket,(Server)this,"socketFromClient");
             executorService.submit(clientHandler::run);
         }
     }
