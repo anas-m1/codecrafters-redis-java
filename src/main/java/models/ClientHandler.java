@@ -56,7 +56,7 @@ public class ClientHandler implements Runnable {
                 }
 
                 String actionVerb = cmdList.get(0);
-                System.out.println("received command:  "+cmdList.get(0));
+                System.out.println("received command: "+cmdList.get(0));
                 if (actionVerb.equalsIgnoreCase("ping")) {
                     System.out.println("ping received");
                     Printer.printPong(clientSocket);
