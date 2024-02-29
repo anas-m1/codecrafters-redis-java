@@ -67,7 +67,7 @@ public class ClientHandler implements Runnable {
                 } else if (actionVerb.equalsIgnoreCase("get")) {
                     handlGetCommand(cmdList);
                 }
-                else if(actionVerb.equalsIgnoreCase("replconf")){
+                else if(actionVerb.equalsIgnoreCase("replconf" )){
                     //REPLCONF GETACK *
                     if(cmdList.get(1).equalsIgnoreCase("getack")) {
                         if(cmdList.get(2).equalsIgnoreCase("*")){
