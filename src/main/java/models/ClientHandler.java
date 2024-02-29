@@ -80,7 +80,11 @@ public class ClientHandler implements Runnable {
                         }
                     }
                     else{
-                        ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
+                        if(cmdList.get(1).equalsIgnoreCase("ack")) {
+
+                        }
+                        else
+                            ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
                     }
                 }
                 else if(actionVerb.equalsIgnoreCase("PSYNC")){
