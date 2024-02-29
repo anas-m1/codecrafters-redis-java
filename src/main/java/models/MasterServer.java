@@ -25,7 +25,7 @@ public class MasterServer extends Server{
     public void respondToPsyncFromSlave(Socket clientSocket) throws Exception {
         System.out.println("master responding to psync from slave"+slaveSockets.get(0));
         Printer.respondToPsyncFromSlave(clientSocket,this.replid,this.offset);
-        if(setCommandQueue.isEmpty())return;
+//        if(setCommandQueue.isEmpty())return;
 
         for(Socket slaveSocket : slaveSockets){
 //            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
