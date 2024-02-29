@@ -92,9 +92,9 @@ public class Printer {
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
         Integer lenrdbBytesStr=rdbBytes.toString().length();
 
-        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf+rdbBytes.toString()).getBytes());
-//        outputStream.write(rdbBytes);
-        outputStream.flush();
+        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf).getBytes());
+        outputStream.write(rdbBytes);
+//        outputStream.flush();
     }
 
     public static void sendCommand(Socket socket, String respMsg) throws IOException {
