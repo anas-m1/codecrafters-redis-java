@@ -49,6 +49,7 @@ public class SlaveServer extends Server {
         System.out.println(responseRespStr+"  :resprespstr");
 
         String reqRespStr=RedisParser.getRespStr(reqCmdList);
+        System.out.println(reqRespStr+" :respstr");
         this.offset+=reqRespStr.length();
 //        System.out.println(offset+"   :offset");
         Printer.sendCommand(socketToMaster,responseRespStr);
@@ -57,6 +58,6 @@ public class SlaveServer extends Server {
     public void handlePingFromMaster(Socket clientSocket) {
 //        1char is 1 byte in redis, but here 1 char is 2 bytes, therefore only calculating chars not bytes
         this.offset+=(("*1\r\n$4\r\nping\r\n").length());
-        System.out.println(offset+"   :offset") ;
+        System.out.println(offset+"   :offset");
     }
 }

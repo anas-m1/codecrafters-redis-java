@@ -16,3 +16,10 @@ get
 $3
 foo
 
+*3
+$8
+replconf
+$6
+getack
+$1
+*
