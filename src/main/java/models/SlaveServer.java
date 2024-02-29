@@ -29,7 +29,6 @@ public class SlaveServer extends Server {
     }
 
     public void setExecutorService(ExecutorService executorService) throws IOException {
-        this.socketToMaster=new Socket(masterHost, masterPort);
         ClientHandler clientHandler=new ClientHandler(this.socketToMaster,this);
         executorService.submit(clientHandler::run);
     }

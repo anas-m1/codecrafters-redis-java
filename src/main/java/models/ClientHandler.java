@@ -104,31 +104,14 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleFullResync(BufferedReader bufferedReader,List<String> cmdList) throws IOException {
-        String rdbFile=bufferedReader.readLine();
-        byte[] rdbFileBytes=rdbFile.getBytes();
-        int i;
-        for(i = 0; i < rdbFileBytes.length; i++) {
-            if(rdbFileBytes[i]==(byte)0xff){
-                i+=8;
-                break;
-            }
-        }
-        if(i < rdbFileBytes.length){
-            System.out.println(rdbFileBytes[i]+"   :rdb ");
-        }
-        if (rdbFileBytes[i] == '*') {
-            String line=bufferedReader.readLine();
-            int numWords = parseInt(line.substring(1));
-            for (int j = 0; j < numWords; j++) {
-                String wordLenLine = bufferedReader.readLine();
-                int WordLength = parseInt(wordLenLine.substring(1));
-                String word = bufferedReader.readLine();
-                cmdList.add(word);
-            }
-        }
-        if(cmdList.size()> 0) {
-            System.out.println(cmdList.get(0));
-        }
+        //  after +FULLRESYNC <> <offset>\r\n is sent, rdb file in below format is sent
+        //        $<length>\r\n<contents>
+        String lengthStr=bufferedReader.readLine();
+        int numBytes= Integer.parseInt(lengthStr.substring(1));
+
+        char[] buffer = new char[numBytes];
+        int bytesRead=bufferedReader.read(buffer,0,numBytes-1);
+        String rdbContentsStr = new String(buffer, 0, numBytes);
     }
 
     private void handlGetCommand(List<String> cmdList) throws Exception {

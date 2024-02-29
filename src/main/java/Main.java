@@ -47,6 +47,8 @@ public class Main {
           ((SlaveServer) serverDetails).setMasterHost(masterHost);
           ((SlaveServer) serverDetails).setMasterPort(masterPort);
           ((SlaveServer) serverDetails).setExecutorService(executorService);
+          Socket socketToMaster=new Socket(masterHost, masterPort);
+          ((SlaveServer) serverDetails).setSocketToMaster(socketToMaster);
       }
 
       serverDetails.setSelfServerPort(port);
