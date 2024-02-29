@@ -21,7 +21,7 @@ public class RedisParser {
 //        each char is considered a byte, and "\r\n" is 2 bytes
         int numBytes=0;
         for(int i=0; i<reqRespStr.length(); i++){
-            if(i+3<reqRespStr.length() && reqRespStr.substring(i,i+4)=="\r\n"){
+            if(i+3<reqRespStr.length() && reqRespStr.substring(i,i+4).equalsIgnoreCase("\r\n")){
                 i+=3;
             }
             numBytes++;
