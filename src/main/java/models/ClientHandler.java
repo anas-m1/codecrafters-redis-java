@@ -34,9 +34,9 @@ public class ClientHandler implements Runnable {
                 System.out.println(line+"     :line");
                 List<String> cmdList = new ArrayList<>();
 
-                if(line.startsWith("+FULLRESYNC")){
-                    handleFullResync(bufferedReader, cmdList);
-                }
+//                if(line.startsWith("+FULLRESYNC")){
+//                    handleFullResync(bufferedReader, cmdList);
+//                }
 
                 if (line.charAt(0) == '*') {
                     int numWords = parseInt(line.substring(1));
