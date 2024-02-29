@@ -2,10 +2,13 @@ package models;
 
 import lombok.Data;
 import utils.Printer;
+import utils.RedisParser;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Data
@@ -36,5 +39,15 @@ public class SlaveServer extends Server {
         this.type="slave";
         this.masterHost=masterHost;
         this.masterPort=masterPort;
+    }
+
+    public void handleReplConfAckFromMaster(Socket socketToMaster) throws IOException {
+//        REPLCONF ACK 0
+        List<String>cmdList=new ArrayList<>();
+        cmdList.add("replconf");
+        cmdList.add("ack");
+        cmdList.add("0");
+        String respStr=RedisParser.getRespStr(cmdList);
+        Printer.sendCommand(socketToMaster,respStr);
     }
 }

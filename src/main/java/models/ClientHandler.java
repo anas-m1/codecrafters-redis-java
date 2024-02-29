@@ -68,7 +68,15 @@ public class ClientHandler implements Runnable {
                     handlGetCommand(cmdList);
                 }
                 else if(actionVerb.equalsIgnoreCase("replconf")){
-                    ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
+                    //REPLCONF GETACK *
+                    if(cmdList.get(1).equalsIgnoreCase("getack")) {
+                        if(cmdList.get(2).equalsIgnoreCase("*")){
+                            ((SlaveServer)serverOfThis).handleReplConfAckFromMaster(clientSocket);
+                        }
+                    }
+                    else{
+                        ((MasterServer)serverOfThis).handleReplConfReqFromSlave(clientSocket);
+                    }
                 }
                 else if(actionVerb.equalsIgnoreCase("PSYNC")){
                     ((MasterServer)serverOfThis).respondToPsyncFromSlave(clientSocket);

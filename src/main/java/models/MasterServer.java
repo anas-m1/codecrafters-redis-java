@@ -2,6 +2,7 @@ package models;
 
 import lombok.Data;
 import utils.Printer;
+import utils.RedisParser;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -27,15 +28,25 @@ public class MasterServer extends Server{
         this.clientSockets.remove(slaveSocket);
         System.out.println("master responding to psync from slave"+slaveSockets.get(0));
         Printer.respondToPsyncFromSlave(slaveSocket,this.replid,this.offset);
-//        if(setCommandQueue.isEmpty())return;
 
         for(Socket ss : slaveSockets){
 //            since the earlier sent command i.e. RDB file doesnt have clrf at the end, the next command gets mixed in same line
 //            Printer.sendCommand(slaveSocket,"");
             for(String respSetcommand: setCommandQueue){
                 Printer.sendCommand(ss,respSetcommand);
+                this.getAck(slaveSocket);
             }
         }
+
+
+    }
+
+    private void getAck(Socket slaveSocket) throws IOException {
+        List<String> cmdList = new ArrayList();
+        cmdList.add("replconf");
+        cmdList.add("getack");
+        cmdList.add("*");
+        Printer.sendCommand(slaveSocket, RedisParser.getRespStr(cmdList));
     }
 
     public void handleReplConfReqFromSlave(Socket slaveSocket) throws IOException {
