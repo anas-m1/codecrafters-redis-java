@@ -47,12 +47,13 @@ public class SlaveServer extends Server {
         System.out.println(String.valueOf(this.offset)+" :offsetString");
         String responseRespStr=RedisParser.getRespStr(responseCmdList);
         System.out.println(responseRespStr+"  :resprespstr");
+        Printer.sendCommand(socketToMaster,responseRespStr);
 
         String reqRespStr=RedisParser.getRespStr(reqCmdList);
         System.out.println(reqRespStr+"  :respstr");
         this.offset+=RedisParser.getRedisBytes(reqRespStr);
 //        System.out.println(offset+"   :offset");
-        Printer.sendCommand(socketToMaster,responseRespStr);
+
     }
 
     public void handlePingFromMaster(Socket clientSocket) {
