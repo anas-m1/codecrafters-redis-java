@@ -90,9 +90,9 @@ public class Printer {
 
         String base64str="UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
         byte[] rdbBytes=Base64.getDecoder().decode(base64str);
-        Integer lenrdbBytesStr=rdbBytes.toString().length();
+        Integer lenrdbBytesStr=rdbBytes.length;
 
-        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf+rdbBytes.toString()).getBytes());
+        outputStream.write(("$"+String.valueOf(lenrdbBytesStr.toString())+clrf+rdbBytes).getBytes());
 //        outputStream.write(rdbBytes);
 //        outputStream.flush();
     }
