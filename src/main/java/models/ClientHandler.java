@@ -103,6 +103,9 @@ public class ClientHandler implements Runnable {
                 break;
             }
         }
+        if(i < rdbFileBytes.length){
+            System.out.println(rdbFileBytes[i]+"   :rdb ");
+        }
         if (rdbFileBytes[i] == '*') {
             String line=bufferedReader.readLine();
             int numWords = parseInt(line.substring(1));
@@ -113,7 +116,9 @@ public class ClientHandler implements Runnable {
                 cmdList.add(word);
             }
         }
-        System.out.println(cmdList.get(0));
+        if(cmdList.size()> 0) {
+            System.out.println(cmdList.get(0));
+        }
     }
 
     private void handlGetCommand(List<String> cmdList) throws Exception {
