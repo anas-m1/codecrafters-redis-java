@@ -41,7 +41,7 @@ public class SlaveServer extends Server {
 //        REPLCONF ACK 0
         List<String>responseCmdList=new ArrayList<>();
         responseCmdList.add("replconf");
-        responseCmdList.add("ack");
+        responseCmdList.add("ack") ;
         responseCmdList.add(String.valueOf(this.offset));
         String responseRespStr=RedisParser.getRespStr(responseCmdList);
 
