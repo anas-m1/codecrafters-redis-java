@@ -174,7 +174,7 @@ public class ClientSocketHandler implements Runnable {
         RedisEntry entry = redisStore.get(key);
         System.out.println(key+"  :key1");
 
-        if (entry.getExpiryAt() > System.currentTimeMillis()) {
+        if (entry.getExpiryAt()> System.currentTimeMillis()) {
         } else {
             redisStore.remove(key);
             return null;
