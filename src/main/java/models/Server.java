@@ -3,7 +3,7 @@ import lombok.Data;
 import utils.Printer;
 import utils.RedisParser;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public abstract class Server {
             System.out.println("here:  " + ((SlaveServer)this).masterHost+ ((SlaveServer)this).masterPort);
             Socket socketToMaster=new Socket(((SlaveServer)this).masterHost, ((SlaveServer)this).masterPort);
             ((SlaveServer)this).socketToMaster=socketToMaster;
-            ClientHandler clientHandler=new ClientHandler(socketToMaster,this,"socketToMaster");
+            ClientSocketHandler clientHandler=new ClientSocketHandler(socketToMaster,this,"socketToMaster");
             executorService.submit(clientHandler::run);
             ((SlaveServer) this).handshakeWithMaster();
         }
@@ -49,7 +49,7 @@ public abstract class Server {
             Socket clientSocket = serverSocket.accept();
             this.clientSockets.add(clientSocket);
             System.out.println("new client connection");
-            ClientHandler clientHandler=new ClientHandler(clientSocket,(Server)this,"socketFromClient");
+            ClientSocketHandler clientHandler=new ClientSocketHandler(clientSocket,(Server)this,"socketFromClient");
             executorService.submit(clientHandler::run);
         }
     }
@@ -67,4 +67,79 @@ public abstract class Server {
         respArr.add(this.dbfilename);
         Printer.sendCommand(clientSocket, RedisParser.getRespStr(respArr));
     }
+
+    public HashMap<String,RedisEntry> getRedisStoreFromRDB() throws IOException {
+        List<String> keyList = new ArrayList<>();
+        HashMap<String,RedisEntry> redisStoreFromRDB= new HashMap<>();
+
+//        InputStreamReader inputStreamReader = new InputStreamReader();
+        File file = new File(this.dbfilename);
+        file.setReadable(true);
+//        FileReader fileReader = new FileReader(this.dbfilename);
+        FileInputStream fileInputStream = new FileInputStream(file);
+//        key section is between fd and fc
+        int byteInt;
+        while (true) {
+            byteInt = fileInputStream.read();
+            System.out.println(byteInt + " :byteint1");
+            if (byteInt == -1) break;
+            if (byteInt == 0xFE)
+                //read till fe
+                while (true) {
+                    byteInt = fileInputStream.read();
+                    System.out.println(byteInt + " :byteint");
+                    if (byteInt == -1) return redisStoreFromRDB;
+                    if (byteInt == 0xFB) {
+                        //  next 2 lines are resizedb fields
+                        System.out.println(fileInputStream.read());
+                        System.out.println(fileInputStream.read());
+                        //                    next fd or fc or directly value type
+                        int next = fileInputStream.read();
+                        if (next == 0xFD) {
+                            int sec = fileInputStream.read();
+                            RedisEntry re=getRedisEntry(fileInputStream);
+
+                            redisStoreFromRDB.put(re.getKey(),re);
+                        }
+                        else if (next == 0xFC) {
+                            int sec = fileInputStream.read();
+                            RedisEntry re=getRedisEntry(fileInputStream);
+                            redisStoreFromRDB.put(re.getKey(),re);
+                        }
+                        else{
+                            RedisEntry re=getRedisEntry(fileInputStream);
+                            redisStoreFromRDB.put(re.getKey(),re);
+                    }
+                }
+        }
+
+        }
+        return redisStoreFromRDB;
+}
+
+    private RedisEntry getRedisEntry(FileInputStream fileInputStream) throws IOException {
+        int keyLen = fileInputStream.read();
+        if (keyLen == -1) return null;
+        String key="";
+        for(int i=0;i<keyLen;i++){
+            char c = (char)fileInputStream.read();
+            System.out.println(c+" : key");
+            key+=(c);
+        }
+
+        int valLen = fileInputStream.read();
+        if (keyLen == -1) return null;
+        String val="";
+        for(int i=0;i<valLen;i++){
+            char c = (char)fileInputStream.read();
+            System.out.println(c+" : val");
+            val+=(c);
+        }
+
+        RedisEntry redisEntry=new RedisEntry(key,val);
+        return redisEntry;
+    }
+
+
+
 }

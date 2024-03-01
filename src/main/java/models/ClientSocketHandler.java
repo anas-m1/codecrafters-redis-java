@@ -3,22 +3,19 @@ package models;
 import utils.Printer;
 import utils.RedisParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
-public class ClientHandler implements Runnable {
+public class ClientSocketHandler implements Runnable {
     private final Server serverOfThis;
     private final String socketType;
     public Socket clientSocket;
 
 
-    public ClientHandler(Socket socket, Server serverOfThis,String socketType) {
+    public ClientSocketHandler(Socket socket, Server serverOfThis, String socketType) {
         this.clientSocket = socket;
         this.serverOfThis = serverOfThis;
         this.socketType=socketType;
@@ -107,6 +104,9 @@ public class ClientHandler implements Runnable {
                         }
                     }
                 }
+                else if(actionVerb.equalsIgnoreCase("keys")){
+                    handlKeysCommand(cmdList);
+                }
 
 
                 for (int i = 0; i < cmdList.size(); i++) {
@@ -125,6 +125,15 @@ public class ClientHandler implements Runnable {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    private void handlKeysCommand(List<String> cmdList) throws IOException {
+        System.out.println("keys command");
+        String key = cmdList.get(1);
+        if(key.equalsIgnoreCase("*")){
+            HashMap<String, RedisEntry> redisStoreFromRDB= serverOfThis.getRedisStoreFromRDB();
+            Printer.sendCommand(clientSocket, RedisParser.getRespStr(redisStoreFromRDB.keySet().stream().toList()));
+        }
     }
 
     private void handleFullResync(BufferedReader bufferedReader,List<String> cmdList) throws IOException {
