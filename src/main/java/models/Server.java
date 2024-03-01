@@ -97,17 +97,17 @@ public abstract class Server {
                         int next = fileInputStream.read();
                         if (next == 0xFD) {
                             int sec = fileInputStream.read();
-                            RedisEntry re=getRedisEntry(fileInputStream);
+                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
 
                             redisStoreFromRDB.put(re.getKey(),re);
                         }
                         else if (next == 0xFC) {
                             int sec = fileInputStream.read();
-                            RedisEntry re=getRedisEntry(fileInputStream);
+                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
                             redisStoreFromRDB.put(re.getKey(),re);
                         }
                         else{
-                            RedisEntry re=getRedisEntry(fileInputStream);
+                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
                             redisStoreFromRDB.put(re.getKey(),re);
                     }
                 }
@@ -117,7 +117,7 @@ public abstract class Server {
         return redisStoreFromRDB;
 }
 
-    private RedisEntry getRedisEntry(FileInputStream fileInputStream) throws IOException {
+    private RedisEntry getRedisEntryFromInputFileStream(FileInputStream fileInputStream) throws IOException {
         int keyLen = fileInputStream.read();
         if (keyLen == -1) return null;
         String key="";
@@ -138,6 +138,21 @@ public abstract class Server {
 
         RedisEntry redisEntry=new RedisEntry(key,val);
         return redisEntry;
+    }
+
+
+//    populate in memory store from file
+    private void getInfoFromRDBToInMemory() throws IOException {
+        HashMap<String,RedisEntry> redisStoreFromRDB=getRedisStoreFromRDB();
+
+        for(String key:redisStoreFromRDB.keySet()){
+            if(this.redisStore.containsKey(key)){
+//                resolve based on latest added
+            }
+            else{
+                this.redisStore.put(key,redisStoreFromRDB.get(key));
+            }
+        }
     }
 
 

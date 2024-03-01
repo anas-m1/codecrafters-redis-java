@@ -151,19 +151,35 @@ public class ClientSocketHandler implements Runnable {
         String key = cmdList.get(1);
         HashMap<String,RedisEntry> redisStore=this.serverOfThis.getRedisStore();
         System.out.println(key+"  :key");
-        if ( redisStore.containsKey(key)) {
-            RedisEntry entry = redisStore.get(key);
-            System.out.println(key+"  :key1");
 
-            if (entry.getExpiryAt() > System.currentTimeMillis()) {
-                Printer.printEcho(clientSocket, entry.getValue());
-            } else {
-                redisStore.remove(key);
-                Printer.printNullBulk(clientSocket);
-            }
+        String value=null;
+        if ( redisStore.containsKey(key)) {
+            value=getValueFromRedisStore(redisStore,key);
         } else {
+            HashMap<String,RedisEntry>redisStoreFromDB=this.serverOfThis.getRedisStoreFromRDB();
+            if (redisStoreFromDB.containsKey(key)) {
+                value=getValueFromRedisStore(redisStoreFromDB,key);
+            }
+        }
+
+        if(!Objects.isNull(value)) {
+            Printer.printEcho(clientSocket, value);
+        }
+        else{
             Printer.printNullBulk(clientSocket);
         }
+    }
+
+    private String getValueFromRedisStore(HashMap<String, RedisEntry> redisStore,String key) throws IOException {
+        RedisEntry entry = redisStore.get(key);
+        System.out.println(key+"  :key1");
+
+        if (entry.getExpiryAt() > System.currentTimeMillis()) {
+        } else {
+            redisStore.remove(key);
+            return null;
+        }
+        return entry.getValue();
     }
 
     private void handlSetCommand(List<String> cmdList) throws Exception {
