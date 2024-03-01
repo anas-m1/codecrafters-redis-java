@@ -92,8 +92,8 @@ public abstract class Server {
                     if (byteInt == 0xFB) {
                         //  next 2 lines are resizedb fields
                         int hashTableLen=fileInputStream.read();
+                        System.out.println(fileInputStream.read());
                         for (int i=0; i<hashTableLen; i++) {
-                            System.out.println(fileInputStream.read());
                             // next fd or fc or directly value type
                             int next = fileInputStream.read();
                             if (next == 0xFD) {
@@ -106,6 +106,7 @@ public abstract class Server {
                                 RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
                                 redisStoreFromRDB.put(re.getKey(), re);
                             } else {
+                                int valueType=next;
                                 RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
                                 redisStoreFromRDB.put(re.getKey(), re);
                             }
