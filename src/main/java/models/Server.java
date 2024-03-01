@@ -96,7 +96,7 @@ public abstract class Server {
                         for (int i=0; i<hashTableLen; i++) {
                             // next fd or fc or directly value type
                             int next = fileInputStream.read();
-                            if (next == 0xFD) {
+                            if (next== 0xFD) {
                                 int sec = fileInputStream.read();
                                 RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
 
