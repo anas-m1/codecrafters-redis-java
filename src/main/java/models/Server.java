@@ -4,6 +4,7 @@ import utils.Printer;
 import utils.RedisParser;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -95,22 +96,7 @@ public abstract class Server {
                         System.out.println(fileInputStream.read());
                         for (int i=0; i<hashTableLen; i++) {
                             // next fd or fc or directly value type
-                            int next = fileInputStream.read();
-                            if (next== 0xFD) {
-                                int sec = fileInputStream.read();
-                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-                                re.setExpiryAt(System.currentTimeMillis()+sec*1000);
-                                redisStoreFromRDB.put(re.getKey(), re);
-                            } else if (next == 0xFC) {
-                                long millisec = fileInputStream.read();
-                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-                                re.setExpiryAt(System.currentTimeMillis()+millisec);
-                                redisStoreFromRDB.put(re.getKey(), re);
-                            } else {
-                                int valueType=next;
-                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-                                redisStoreFromRDB.put(re.getKey(), re);
-                            }
+                            getHashTableEntriesAndPopulate(fileInputStream,redisStoreFromRDB);
                         }
                 }
         }
@@ -118,6 +104,41 @@ public abstract class Server {
         }
         return redisStoreFromRDB;
 }
+
+    private void getHashTableEntriesAndPopulate(FileInputStream fileInputStream, HashMap<String, RedisEntry> redisStoreFromRDB) throws IOException {
+        int currByte = fileInputStream.read();
+        if (currByte== 0xFD) {
+            System.out.println("hello");
+//            getNBytes(fileInputStream,4);
+            byte[] byteArr = fileInputStream.readNBytes(4);
+            int sec = new BigInteger(byteArr).intValue();
+            System.out.println(sec+" :sec ");
+            RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+            re.setExpiryAt(System.currentTimeMillis()+sec*1000);
+            redisStoreFromRDB.put(re.getKey(), re);
+        } else if (currByte == 0xFC) {
+            System.out.println("hello1");
+            byte[] byteArr = fileInputStream.readNBytes(8);
+            long millisec = new BigInteger(byteArr).longValue();
+            System.out.println(millisec+" :msec ");
+            RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+            re.setExpiryAt(System.currentTimeMillis()+millisec);
+            redisStoreFromRDB.put(re.getKey(), re);
+        } else {
+            System.out.println("hello2");
+            int valueType=currByte;
+            RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+            redisStoreFromRDB.put(re.getKey(), re);
+        }
+    }
+
+//    private void getNBytes(FileInputStream fileInputStream, int numBytes) {
+//        String byteStr="";
+//        for(int i=0; i<numBytes; i++) {
+//            fileInputStream.read();
+//            fileInputStream.rea
+//        }
+//    }
 
     private RedisEntry getRedisEntryFromInputFileStream(FileInputStream fileInputStream) throws IOException {
         int keyLen = fileInputStream.read();
