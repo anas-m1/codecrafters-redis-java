@@ -99,11 +99,12 @@ public abstract class Server {
                             if (next== 0xFD) {
                                 int sec = fileInputStream.read();
                                 RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-
+                                re.setExpiryAt(System.currentTimeMillis()+sec*1000);
                                 redisStoreFromRDB.put(re.getKey(), re);
                             } else if (next == 0xFC) {
-                                int sec = fileInputStream.read();
+                                long millisec = fileInputStream.read();
                                 RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+                                re.setExpiryAt(System.currentTimeMillis()+millisec);
                                 redisStoreFromRDB.put(re.getKey(), re);
                             } else {
                                 int valueType=next;
