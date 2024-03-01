@@ -91,13 +91,21 @@ public abstract class Server {
                     System.out.println(byteInt + " :byteint");
                     if (byteInt == -1) return redisStoreFromRDB;
                     if (byteInt == 0xFB) {
+                        //  fb->251
                         //  next 2 lines are resizedb fields
                         int hashTableLen=fileInputStream.read();
-                        System.out.println(fileInputStream.read());
+                        int hashTablewExpiryLen=fileInputStream.read();
+                        System.out.println(hashTableLen + ":hashTableLen");
+                        System.out.println(hashTablewExpiryLen + ":hashTablewExpiry");
+//                        System.out.println(fileInputStream.read());
                         for (int i=0; i<hashTableLen; i++) {
                             // next fd or fc or directly value type
                             getHashTableEntriesAndPopulate(fileInputStream,redisStoreFromRDB);
                         }
+//                        for (int i=0; i<hashTablewExpiryLen; i++) {
+//                            // next fd or fc or directly value type
+//                            getHashTableEntriesAndPopulate(fileInputStream,redisStoreFromRDB);
+//                        }
                         break;
                     }
                 }
@@ -108,7 +116,7 @@ public abstract class Server {
 
         }
         return redisStoreFromRDB;
-}
+    }
 
     private void getHashTableEntriesAndPopulate(FileInputStream fileInputStream, HashMap<String, RedisEntry> redisStoreFromRDB) throws IOException {
         int currByte = fileInputStream.read();
@@ -117,16 +125,22 @@ public abstract class Server {
             byte[] byteArr = fileInputStream.readNBytes(4);
             int sec = new BigInteger(byteArr).intValue();
             System.out.println(sec+" :sec ");
+            System.out.println(fileInputStream.read());
             RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
             re.setExpiryAt(System.currentTimeMillis()+sec*1000);
             redisStoreFromRDB.put(re.getKey(), re);
         } else if (currByte == 0xFC) {
             System.out.println("hello1");
-            byte[] byteArr = fileInputStream.readNBytes(4);
-            long millisec = new BigInteger(byteArr).longValue();
-            System.out.println(millisec+" :msec ");
+            byte[] byteArr = fileInputStream.readNBytes(8);
+            long millisec = new BigInteger(1,byteArr).longValue();
+//            new BigInteger()
+//            System.out.println(millisec+" :msec ");
+//            for(int i=0;i<8;i++) {
+//                System.out.println(fileInputStream.readNBytes(1)[0] + "   : millisec");
+//            }
+            System.out.println(fileInputStream.read() +"   : inputval");
             RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-            re.setExpiryAt(System.currentTimeMillis()+millisec);
+//            re.setExpiryAt(System.currentTimeMillis()+millisec);
             redisStoreFromRDB.put(re.getKey(), re);
         } else {
             System.out.println("hello2");
@@ -160,7 +174,7 @@ public abstract class Server {
     }
 
 
-//    populate in memory store from file
+    //    populate in memory store from file
     private void getInfoFromRDBToInMemory() throws IOException {
         HashMap<String,RedisEntry> redisStoreFromRDB=getRedisStoreFromRDB();
 
