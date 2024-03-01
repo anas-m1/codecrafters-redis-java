@@ -73,7 +73,7 @@ public abstract class Server {
         HashMap<String,RedisEntry> redisStoreFromRDB= new HashMap<>();
 
 //        InputStreamReader inputStreamReader = new InputStreamReader();
-        File file = new File(this.dbfilename);
+        File file = new File(this.dir+"/"+this.dbfilename);
         file.setReadable(true);
 //        FileReader fileReader = new FileReader(this.dbfilename);
         FileInputStream fileInputStream = new FileInputStream(file);
