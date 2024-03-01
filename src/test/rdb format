@@ -7,7 +7,7 @@ $string-encoded-key         # May contain arbitrary metadata
 $string-encoded-value       # such as Redis version, creation time, used memory, ...
 ----------------------------
 FE 00                       # Indicates database selector. db number = 00
-FB                          # Indicates a resizedb field
+FB                          # Indicates a resizedb field (fb=251)
 $length-encoded-int         # Size of the corresponding hash table
 $length-encoded-int         # Size of the corresponding expire hash table
 ----------------------------# Key-Value pair starts

@@ -98,8 +98,13 @@ public abstract class Server {
                             // next fd or fc or directly value type
                             getHashTableEntriesAndPopulate(fileInputStream,redisStoreFromRDB);
                         }
+                        break;
+                    }
                 }
-        }
+            else if (byteInt == 0xFF) {
+                // end of rdb file
+                break;
+            }
 
         }
         return redisStoreFromRDB;
@@ -109,7 +114,6 @@ public abstract class Server {
         int currByte = fileInputStream.read();
         if (currByte== 0xFD) {
             System.out.println("hello");
-//            getNBytes(fileInputStream,4);
             byte[] byteArr = fileInputStream.readNBytes(4);
             int sec = new BigInteger(byteArr).intValue();
             System.out.println(sec+" :sec ");
@@ -131,14 +135,6 @@ public abstract class Server {
             redisStoreFromRDB.put(re.getKey(), re);
         }
     }
-
-//    private void getNBytes(FileInputStream fileInputStream, int numBytes) {
-//        String byteStr="";
-//        for(int i=0; i<numBytes; i++) {
-//            fileInputStream.read();
-//            fileInputStream.rea
-//        }
-//    }
 
     private RedisEntry getRedisEntryFromInputFileStream(FileInputStream fileInputStream) throws IOException {
         int keyLen = fileInputStream.read();
