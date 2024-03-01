@@ -118,7 +118,7 @@ public abstract class Server {
             redisStoreFromRDB.put(re.getKey(), re);
         } else if (currByte == 0xFC) {
             System.out.println("hello1");
-            byte[] byteArr = fileInputStream.readNBytes(8);
+            byte[] byteArr = fileInputStream.readNBytes(4);
             long millisec = new BigInteger(byteArr).longValue();
             System.out.println(millisec+" :msec ");
             RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
