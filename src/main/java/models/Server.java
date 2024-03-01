@@ -91,25 +91,25 @@ public abstract class Server {
                     if (byteInt == -1) return redisStoreFromRDB;
                     if (byteInt == 0xFB) {
                         //  next 2 lines are resizedb fields
-                        System.out.println(fileInputStream.read());
-                        System.out.println(fileInputStream.read());
-                        //                    next fd or fc or directly value type
-                        int next = fileInputStream.read();
-                        if (next == 0xFD) {
-                            int sec = fileInputStream.read();
-                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
+                        int hashTableLen=fileInputStream.read();
+                        for (int i=0; i<hashTableLen; i++) {
+                            System.out.println(fileInputStream.read());
+                            // next fd or fc or directly value type
+                            int next = fileInputStream.read();
+                            if (next == 0xFD) {
+                                int sec = fileInputStream.read();
+                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
 
-                            redisStoreFromRDB.put(re.getKey(),re);
+                                redisStoreFromRDB.put(re.getKey(), re);
+                            } else if (next == 0xFC) {
+                                int sec = fileInputStream.read();
+                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+                                redisStoreFromRDB.put(re.getKey(), re);
+                            } else {
+                                RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
+                                redisStoreFromRDB.put(re.getKey(), re);
+                            }
                         }
-                        else if (next == 0xFC) {
-                            int sec = fileInputStream.read();
-                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
-                            redisStoreFromRDB.put(re.getKey(),re);
-                        }
-                        else{
-                            RedisEntry re=getRedisEntryFromInputFileStream(fileInputStream);
-                            redisStoreFromRDB.put(re.getKey(),re);
-                    }
                 }
         }
 
