@@ -33,7 +33,7 @@ public class Printer {
 
     public static void printNullBulk(Socket clientSocket) throws Exception {
         OutputStream outputStream=clientSocket.getOutputStream();
-        byte[] byteArr="*-1\r\n".getBytes();
+        byte[] byteArr="$-1\r\n".getBytes();
         outputStream.write(byteArr);
         outputStream.flush();
     }
