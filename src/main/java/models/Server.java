@@ -132,6 +132,9 @@ public abstract class Server {
         } else if (currByte == 0xFC) {
             System.out.println("hello1");
             byte[] byteArr = fileInputStream.readNBytes(8);
+            for(byte x:byteArr) {
+                System.out.println(x+"  : byteofms");
+            }
             long millisec = new BigInteger(1,byteArr).longValue();
 //            new BigInteger()
             System.out.println(millisec+" :msec ");
