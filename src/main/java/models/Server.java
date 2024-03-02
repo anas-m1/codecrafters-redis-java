@@ -134,13 +134,13 @@ public abstract class Server {
             byte[] byteArr = fileInputStream.readNBytes(8);
             long millisec = new BigInteger(1,byteArr).longValue();
 //            new BigInteger()
-//            System.out.println(millisec+" :msec ");
+            System.out.println(millisec+" :msec ");
 //            for(int i=0;i<8;i++) {
 //                System.out.println(fileInputStream.readNBytes(1)[0] + "   : millisec");
 //            }
             System.out.println(fileInputStream.read() +"   : inputval");
             RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
-//            re.setExpiryAt(System.currentTimeMillis()+millisec);
+            re.setExpiryAt(System.currentTimeMillis()+millisec);
             redisStoreFromRDB.put(re.getKey(), re);
         } else {
             System.out.println("hello2");
