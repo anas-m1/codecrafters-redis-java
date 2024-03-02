@@ -132,11 +132,12 @@ public abstract class Server {
         } else if (currByte == 0xFC) {
             System.out.println("hello1");
             byte[] byteArr = fileInputStream.readNBytes(8);
+
+            long millisec;
             for(byte x:byteArr) {
-                System.out.println(x+"  : byteofms");
+                System.out.println(String.format("%02x",x)+"  : byteofms");
             }
-            long millisec = new BigInteger(1,byteArr).longValue();
-//            new BigInteger()
+            millisec=getLongValFromLEByteArray(byteArr);
             System.out.println(millisec+" :msec ");
 //            for(int i=0;i<8;i++) {
 //                System.out.println(fileInputStream.readNBytes(1)[0] + "   : millisec");
@@ -151,6 +152,20 @@ public abstract class Server {
             RedisEntry re = getRedisEntryFromInputFileStream(fileInputStream);
             redisStoreFromRDB.put(re.getKey(), re);
         }
+    }
+
+    private long getLongValFromLEByteArray(byte[] byteArr) {
+        String bin="";
+        for(int i=0; i<byteArr.length; i++) {
+            String el=String.format("%02x",byteArr[i]);
+            System.out.println(el+"   :el");
+            bin=el+bin;
+
+        }
+        System.out.println(bin+"   :bin");
+        Long result=Long.parseLong(bin,16);
+        System.out.println(result);
+        return result;
     }
 
     private RedisEntry getRedisEntryFromInputFileStream(FileInputStream fileInputStream) throws IOException {
